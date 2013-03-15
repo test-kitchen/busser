@@ -61,7 +61,21 @@ module KB
       end
 
       def latest_version(name)
-        spec = dep_installer.find_gems_with_sources(new_dep(name)).last.first
+        available_gems = dep_installer.find_gems_with_sources(new_dep(name))
+
+        spec, source = if available_gems.respond_to?(:last)
+          # DependencyInstaller sorts the results such that the last one is
+          # always the one it considers best.
+          spec_with_source = available_gems.last
+          spec_with_source && spec_with_source
+        else
+          # Rubygems 2.0 returns a Gem::Available set, which is a
+          # collection of AvailableSet::Tuple structs
+          available_gems.pick_best!
+          best_gem = available_gems.set.first
+          best_gem && [best_gem.spec, best_gem.source]
+        end
+
         spec && spec.version && spec.version.to_s
       end
 
