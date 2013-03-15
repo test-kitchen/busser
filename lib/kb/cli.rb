@@ -16,7 +16,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "kb/version"
+require 'kb/thor'
+require 'kb/command/plugin'
+require 'kb/command/suite'
 
 module KB
+
+  # Main command line interface class which delegates to subcommands.
+  #
+  # @author Fletcher Nichol <fnichol@nichol.ca>
+  #
+  class CLI < Thor::Base
+
+    register KB::Command::Suite, "suite",
+      "suite SUBCOMMAND", "Suite subcommands"
+  end
 end

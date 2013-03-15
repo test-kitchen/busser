@@ -16,7 +16,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "kb/version"
+require 'kb/thor'
 
 module KB
+
+  module Command
+
+    # Suite path command.
+    #
+    # @author Fletcher Nichol <fnichol@nichol.ca>
+    #
+    class SuitePath < KB::Thor::BaseGroup
+
+      argument :suite_name, :required => false
+
+      def path
+        say suite_path(suite_name)
+      end
+    end
+  end
 end

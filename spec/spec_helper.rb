@@ -16,7 +16,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "kb/version"
+require 'simplecov'
+require 'fakefs/safe'
+require 'minitest/autorun'
+require 'mocha/setup'
 
-module KB
-end
+SimpleCov.command_name "unit"

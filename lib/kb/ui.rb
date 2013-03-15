@@ -16,7 +16,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "kb/version"
+require 'thor/shell'
 
 module KB
+
+  module UI
+
+    def banner(msg)
+      say("-----> #{msg}")
+    end
+
+    def info(msg)
+      say("       #{msg}")
+    end
+
+    def warn(msg)
+      say(">>>>>> #{msg}")
+    end
+  end
 end

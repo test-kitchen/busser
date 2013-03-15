@@ -16,7 +16,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "kb/version"
+require 'pathname'
 
 module KB
+
+  module Helpers
+
+    module_function
+
+    def suite_path(name = nil)
+      path = root_path + "suites"
+      path += name if name
+      path
+    end
+
+    def root_path
+      Pathname.new(ENV['KB_ROOT'] || "/opt/kb")
+    end
+  end
 end

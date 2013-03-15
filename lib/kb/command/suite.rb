@@ -16,7 +16,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "kb/version"
+require 'kb/thor'
+require 'kb/command/suite_cleanup'
+require 'kb/command/suite_path'
 
 module KB
+
+  module Command
+
+    # Suite commands.
+    #
+    # @author Fletcher Nichol <fnichol@nichol.ca>
+    #
+    class Suite < KB::Thor::Base
+
+      register KB::Command::SuiteCleanup, "cleanup",
+        "cleanup", "Cleans up test suite directories"
+      register KB::Command::SuitePath, "path",
+        "path [<plugin_name>]", "Displays the directory for suite tests"
+    end
+  end
 end

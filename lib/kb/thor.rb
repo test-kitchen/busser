@@ -16,7 +16,33 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "kb/version"
+require 'thor'
+
+require 'kb/helpers'
+require 'kb/ui'
 
 module KB
+
+  module Thor
+
+    # Base class for all Thor subclasses which includes useful mixins.
+    #
+    # @author Fletcher Nichol <fnichol@nichol.ca>
+    #
+    class Base < ::Thor
+
+      include Helpers
+      include UI
+    end
+
+    # Base class for all Thor Group subclasses which includes useful mixins.
+    #
+    # @author Fletcher Nichol <fnichol@nichol.ca>
+    #
+    class BaseGroup < ::Thor::Group
+
+      include Helpers
+      include UI
+    end
+  end
 end

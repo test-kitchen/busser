@@ -16,7 +16,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "kb/version"
+require 'kb/thor'
 
 module KB
+
+  module Command
+
+    # Suite cleanup command.
+    #
+    # @author Fletcher Nichol <fnichol@nichol.ca>
+    #
+    class SuiteCleanup < KB::Thor::BaseGroup
+
+      def cleanup
+        if suite_path.directory?
+          Pathname.glob(suite_path + "*").each do |dir|
+            info "Removing #{dir}"
+            dir.rmtree
+          end
+        else
+          info "Suite path directory #{suite_path} does not exist, skipping."
+        end
+      end
+    end
+  end
 end
