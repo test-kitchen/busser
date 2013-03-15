@@ -17,21 +17,20 @@
 # limitations under the License.
 
 require 'kb/thor'
-require 'kb/command/plugin'
-require 'kb/command/suite'
+require 'kb/command/plugin_install'
 
 module KB
 
-  # Main command line interface class which delegates to subcommands.
-  #
-  # @author Fletcher Nichol <fnichol@nichol.ca>
-  #
-  class CLI < Thor::Base
+  module Command
 
-    register KB::Command::Plugin, "plugin",
-      "plugin SUBCOMMAND", "Plugin subcommands"
+    # Plugin commands.
+    #
+    # @author Fletcher Nichol <fnichol@nichol.ca>
+    #
+    class Plugin < KB::Thor::Base
 
-    register KB::Command::Suite, "suite",
-      "suite SUBCOMMAND", "Suite subcommands"
+      register KB::Command::PluginInstall, "install",
+        "install PLUGIN [PLUGIN ...]", "Do things"
+    end
   end
 end
