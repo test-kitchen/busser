@@ -1,5 +1,8 @@
 # Kitchen Busser
 
+[![Build Status](https://travis-ci.org/fnichol/kb-ruby.png?branch=master)](https://travis-ci.org/fnichol/kb-ruby)
+[![Code Climate](https://codeclimate.com/github/fnichol/kb-ruby.png)](https://codeclimate.com/github/fnichol/kb-ruby)
+
 The Kitchen Busser (kb) is a test setup and execution framework designed to
 work on remote nodes whose system dependencies cannot be relied upon, except
 for an Omnibus installation of Chef. It uses a plugin architecture to add
