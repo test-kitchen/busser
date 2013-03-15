@@ -17,7 +17,6 @@
 # limitations under the License.
 
 require 'kb/thor'
-require 'kb/command/plugin'
 require 'kb/command/suite'
 
 module KB
