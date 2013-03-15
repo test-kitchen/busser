@@ -17,5 +17,5 @@
 # limitations under the License.
 
 module KB
-  VERSION = "1.0.0.dev"
+  VERSION = "1.0.0.alpha.0"
 end
