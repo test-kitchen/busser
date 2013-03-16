@@ -18,6 +18,7 @@
 
 require 'kb/thor'
 require 'kb/command/plugin_install'
+require 'kb/command/plugin_list'
 
 module KB
 
@@ -30,7 +31,9 @@ module KB
     class Plugin < KB::Thor::Base
 
       register KB::Command::PluginInstall, "install",
-        "install PLUGIN [PLUGIN ...]", "Do things"
+        "install PLUGIN [PLUGIN ...]", "Installs one or more plugins"
+      register KB::Command::PluginList, "list",
+        "list", "Lists installed plugins"
     end
   end
 end

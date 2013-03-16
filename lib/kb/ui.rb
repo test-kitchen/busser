@@ -33,5 +33,20 @@ module KB
     def warn(msg)
       say(">>>>>> #{msg}")
     end
+
+    def run!(cmd)
+      run(cmd, :capture => false, :verbose => false)
+
+      if $?.success?
+        true
+      else
+        die "Command [#{cmd}] exit code was #{$?.exitstatus}", $?.exitstatus
+      end
+    end
+
+    def die(msg, exitstatus = 1)
+      $stderr.puts(msg)
+      exit(exitstatus)
+    end
   end
 end

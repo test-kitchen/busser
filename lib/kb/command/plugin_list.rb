@@ -16,35 +16,35 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'thor'
-
-require 'kb/helpers'
-require 'kb/ui'
+require 'kb/plugin'
+require 'kb/thor'
 
 module KB
 
-  module Thor
+  module Command
 
-    # Base class for all Thor subclasses which includes useful mixins.
+    # Plugin list command.
     #
     # @author Fletcher Nichol <fnichol@nichol.ca>
     #
-    class Base < ::Thor
+    class PluginList < KB::Thor::BaseGroup
 
-      include Helpers
-      include UI
-      include ::Thor::Actions
-    end
+      def list
+        if plugin_data.empty?
+          say "No plugins installed yet"
+        else
+          print_table([["Plugin", "Version"]] + plugin_data)
+        end
+      end
 
-    # Base class for all Thor Group subclasses which includes useful mixins.
-    #
-    # @author Fletcher Nichol <fnichol@nichol.ca>
-    #
-    class BaseGroup < ::Thor::Group
+      private
 
-      include Helpers
-      include UI
-      include ::Thor::Actions
+      def plugin_data
+        @plugin_data ||= KB::Plugin.runner_plugins.map do |path|
+          spec = KB::Plugin.gem_from_path(path)
+          [File.basename(path), (spec && spec.version)]
+        end
+      end
     end
   end
 end

@@ -19,6 +19,7 @@
 require 'kb/thor'
 require 'kb/command/plugin'
 require 'kb/command/suite'
+require 'kb/command/test'
 
 module KB
 
@@ -30,8 +31,9 @@ module KB
 
     register KB::Command::Plugin, "plugin",
       "plugin SUBCOMMAND", "Plugin subcommands"
-
     register KB::Command::Suite, "suite",
       "suite SUBCOMMAND", "Suite subcommands"
+    register KB::Command::Test, "test",
+      "test [PLUGIN ...]", "Runs test suites"
   end
 end

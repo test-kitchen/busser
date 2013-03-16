@@ -16,35 +16,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'thor'
-
-require 'kb/helpers'
-require 'kb/ui'
+require 'kb/thor'
+require 'kb/plugin'
 
 module KB
 
-  module Thor
+  module Command
 
-    # Base class for all Thor subclasses which includes useful mixins.
+    # Test command.
     #
     # @author Fletcher Nichol <fnichol@nichol.ca>
     #
-    class Base < ::Thor
+    class Test < KB::Thor::BaseGroup
 
-      include Helpers
-      include UI
-      include ::Thor::Actions
-    end
+      argument :plugins, :type => :array, :required => false
 
-    # Base class for all Thor Group subclasses which includes useful mixins.
-    #
-    # @author Fletcher Nichol <fnichol@nichol.ca>
-    #
-    class BaseGroup < ::Thor::Group
+      def perform
+        KB::Plugin.runner_plugins(plugins).each do |runner_path|
+          runner = File.basename(runner_path)
+          klass = ::Thor::Util.camel_case(runner)
 
-      include Helpers
-      include UI
-      include ::Thor::Actions
+          banner "Running #{runner} test suite"
+          KB::Plugin.require!(runner_path)
+          invoke KB::Plugin.runner_class(klass)
+        end
+      end
     end
   end
 end

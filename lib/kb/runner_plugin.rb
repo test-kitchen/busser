@@ -16,35 +16,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'thor'
-
-require 'kb/helpers'
-require 'kb/ui'
+require 'kb/thor'
 
 module KB
 
-  module Thor
+  module RunnerPlugin
 
-    # Base class for all Thor subclasses which includes useful mixins.
+    # Base class for all test runner plugins.
     #
     # @author Fletcher Nichol <fnichol@nichol.ca>
     #
-    class Base < ::Thor
-
-      include Helpers
-      include UI
-      include ::Thor::Actions
-    end
-
-    # Base class for all Thor Group subclasses which includes useful mixins.
-    #
-    # @author Fletcher Nichol <fnichol@nichol.ca>
-    #
-    class BaseGroup < ::Thor::Group
-
-      include Helpers
-      include UI
-      include ::Thor::Actions
+    class Base < KB::Thor::BaseGroup
     end
   end
 end
