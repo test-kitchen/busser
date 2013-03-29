@@ -18,6 +18,7 @@
 
 require 'busser/thor'
 require 'busser/command/plugin'
+require 'busser/command/setup'
 require 'busser/command/suite'
 require 'busser/command/test'
 
@@ -29,6 +30,8 @@ module Busser
   #
   class CLI < Thor::Base
 
+    register Busser::Command::Setup, "setup",
+      "setup", "Creates a Busser home"
     register Busser::Command::Plugin, "plugin",
       "plugin SUBCOMMAND", "Plugin subcommands"
     register Busser::Command::Suite, "suite",

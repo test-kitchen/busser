@@ -51,6 +51,15 @@ Then(/^a gem named "(.*?)" is installed$/) do |name|
   end
 end
 
+Then(/^the BUSSER_ROOT directory should exist$/) do
+  check_directory_presence([ENV['BUSSER_ROOT']], true)
+end
+
+Then(/^a busser binstub file should contain:$/) do |partial_content|
+  file = File.join(ENV['BUSSER_ROOT'], %w{bin busser})
+  check_file_content(file, partial_content, true)
+end
+
 Then(/^pry me$/) do
   require 'pry' ; binding.pry
 end
