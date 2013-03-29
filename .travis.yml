@@ -6,6 +6,14 @@ rvm:
 - 1.9.2
 - ruby-head
 
+env:
+  - RUBYGEMS_VERSION=2.0.3
+  - RUBYGEMS_VERSION=1.8.25
+
+before_install:
+  - gem update --system $RUBYGEMS_VERSION
+  - gem --version
+
 matrix:
   allow_failures:
   - rvm: ruby-head
