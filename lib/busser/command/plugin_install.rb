@@ -17,9 +17,9 @@
 # limitations under the License.
 
 require 'rubygems/dependency_installer'
-require 'kb/thor'
+require 'busser/thor'
 
-module KB
+module Busser
 
   module Command
 
@@ -27,7 +27,7 @@ module KB
     #
     # @author Fletcher Nichol <fnichol@nichol.ca>
     #
-    class PluginInstall < KB::Thor::BaseGroup
+    class PluginInstall < Busser::Thor::BaseGroup
 
       argument :plugins, :type => :array
 

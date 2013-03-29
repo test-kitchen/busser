@@ -5,7 +5,7 @@ SimpleCov.command_name "features"
 
 Before do
   @aruba_timeout_seconds = 10
-  @kb_root_dirs = []
+  @busser_root_dirs = []
 end
 
 After do |s|
@@ -20,7 +20,7 @@ After do |s|
     ENV[backup_key.sub(/^_CUKE_/, '')] = ENV.delete(backup_key)
   end
 
-  @kb_root_dirs.each { |dir| FileUtils.rm_rf(dir) }
+  @busser_root_dirs.each { |dir| FileUtils.rm_rf(dir) }
 end
 
 def backup_envvar(key)

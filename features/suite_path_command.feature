@@ -1,15 +1,15 @@
 Feature: Suite path command
   In order to determine the directory containing suite tests
-  As a user of kb
+  As a user of Busser
   I want a command to echo this directory on standard output
 
   Background:
-    Given a KB_ROOT of "/path/to/kb"
+    Given a BUSSER_ROOT of "/path/to/busser"
 
   Scenario: Get base suite path
-    When I successfully run `kb suite path`
-    Then the output should contain exactly "/path/to/kb/suites\n"
+    When I successfully run `busser suite path`
+    Then the output should contain exactly "/path/to/busser/suites\n"
 
   Scenario: Get suite path for a plugin
-    When I successfully run `kb suite path footester`
-    Then the output should contain exactly "/path/to/kb/suites/footester\n"
+    When I successfully run `busser suite path footester`
+    Then the output should contain exactly "/path/to/busser/suites/footester\n"

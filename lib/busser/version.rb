@@ -16,31 +16,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'kb/thor'
-require 'kb/plugin'
-
-module KB
-
-  module Command
-
-    # Test command.
-    #
-    # @author Fletcher Nichol <fnichol@nichol.ca>
-    #
-    class Test < KB::Thor::BaseGroup
-
-      argument :plugins, :type => :array, :required => false
-
-      def perform
-        KB::Plugin.runner_plugins(plugins).each do |runner_path|
-          runner = File.basename(runner_path)
-          klass = ::Thor::Util.camel_case(runner)
-
-          banner "Running #{runner} test suite"
-          KB::Plugin.require!(runner_path)
-          invoke KB::Plugin.runner_class(klass)
-        end
-      end
-    end
-  end
+module Busser
+  VERSION = "0.1.0.dev"
 end

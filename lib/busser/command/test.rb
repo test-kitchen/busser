@@ -16,22 +16,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'pathname'
+require 'busser/thor'
+require 'busser/plugin'
 
-module KB
+module Busser
 
-  module Helpers
+  module Command
 
-    module_function
+    # Test command.
+    #
+    # @author Fletcher Nichol <fnichol@nichol.ca>
+    #
+    class Test < Busser::Thor::BaseGroup
 
-    def suite_path(name = nil)
-      path = root_path + "suites"
-      path += name if name
-      path
-    end
+      argument :plugins, :type => :array, :required => false
 
-    def root_path
-      Pathname.new(ENV['KB_ROOT'] || "/opt/kb")
+      def perform
+        Busser::Plugin.runner_plugins(plugins).each do |runner_path|
+          runner = File.basename(runner_path)
+          klass = ::Thor::Util.camel_case(runner)
+
+          banner "Running #{runner} test suite"
+          Busser::Plugin.require!(runner_path)
+          invoke Busser::Plugin.runner_class(klass)
+        end
+      end
     end
   end
 end

@@ -1,16 +1,16 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'kb/version'
+require 'busser/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "kb"
-  spec.version       = KB::VERSION
+  spec.name          = "busser"
+  spec.version       = Busser::VERSION
   spec.authors       = ["Fletcher Nichol"]
   spec.email         = ["fnichol@nichol.ca"]
   spec.description   = %q{Kitchen Busser - Runs tests for projects in test-kitchen}
   spec.summary       = spec.description
-  spec.homepage      = "https://github.com/fnichol/kb-ruby"
+  spec.homepage      = "https://github.com/fnichol/busser"
   spec.license       = 'Apache 2.0'
 
   spec.files         = `git ls-files`.split($/)

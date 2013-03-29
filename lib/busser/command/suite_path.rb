@@ -16,6 +16,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-module KB
-  VERSION = "1.0.0.alpha.1"
+require 'busser/thor'
+
+module Busser
+
+  module Command
+
+    # Suite path command.
+    #
+    # @author Fletcher Nichol <fnichol@nichol.ca>
+    #
+    class SuitePath < Busser::Thor::BaseGroup
+
+      argument :suite_name, :required => false
+
+      def path
+        say suite_path(suite_name)
+      end
+    end
+  end
 end

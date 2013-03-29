@@ -16,37 +16,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'thor/shell'
+require 'busser/thor'
 
-module KB
+module Busser
 
-  module UI
+  module Command
 
-    def banner(msg)
-      say("-----> #{msg}")
-    end
+    # Suite cleanup command.
+    #
+    # @author Fletcher Nichol <fnichol@nichol.ca>
+    #
+    class SuiteCleanup < Busser::Thor::BaseGroup
 
-    def info(msg)
-      say("       #{msg}")
-    end
-
-    def warn(msg)
-      say(">>>>>> #{msg}")
-    end
-
-    def run!(cmd)
-      run(cmd, :capture => false, :verbose => false)
-
-      if $?.success?
-        true
-      else
-        die "Command [#{cmd}] exit code was #{$?.exitstatus}", $?.exitstatus
+      def cleanup
+        if suite_path.directory?
+          Pathname.glob(suite_path + "*").each do |dir|
+            info "Removing #{dir}"
+            dir.rmtree
+          end
+        else
+          info "Suite path directory #{suite_path} does not exist, skipping."
+        end
       end
-    end
-
-    def die(msg, exitstatus = 1)
-      $stderr.puts(msg)
-      exit(exitstatus)
     end
   end
 end
