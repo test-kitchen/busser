@@ -16,9 +16,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'kb/thor'
+require 'busser/thor'
 
-module KB
+module Busser
 
   module RunnerPlugin
 
@@ -26,7 +26,7 @@ module KB
     #
     # @author Fletcher Nichol <fnichol@nichol.ca>
     #
-    class Base < KB::Thor::BaseGroup
+    class Base < Busser::Thor::BaseGroup
     end
   end
 end

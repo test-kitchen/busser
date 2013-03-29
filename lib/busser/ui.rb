@@ -16,35 +16,37 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'kb/plugin'
-require 'kb/thor'
+require 'thor/shell'
 
-module KB
+module Busser
 
-  module Command
+  module UI
 
-    # Plugin list command.
-    #
-    # @author Fletcher Nichol <fnichol@nichol.ca>
-    #
-    class PluginList < KB::Thor::BaseGroup
+    def banner(msg)
+      say("-----> #{msg}")
+    end
 
-      def list
-        if plugin_data.empty?
-          say "No plugins installed yet"
-        else
-          print_table([["Plugin", "Version"]] + plugin_data)
-        end
+    def info(msg)
+      say("       #{msg}")
+    end
+
+    def warn(msg)
+      say(">>>>>> #{msg}")
+    end
+
+    def run!(cmd)
+      run(cmd, :capture => false, :verbose => false)
+
+      if $?.success?
+        true
+      else
+        die "Command [#{cmd}] exit code was #{$?.exitstatus}", $?.exitstatus
       end
+    end
 
-      private
-
-      def plugin_data
-        @plugin_data ||= KB::Plugin.runner_plugins.map do |path|
-          spec = KB::Plugin.gem_from_path(path)
-          [File.basename(path), (spec && spec.version)]
-        end
-      end
+    def die(msg, exitstatus = 1)
+      $stderr.puts(msg)
+      exit(exitstatus)
     end
   end
 end

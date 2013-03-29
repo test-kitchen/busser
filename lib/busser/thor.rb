@@ -16,24 +16,35 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'kb/thor'
-require 'kb/command/plugin_install'
-require 'kb/command/plugin_list'
+require 'thor'
 
-module KB
+require 'busser/helpers'
+require 'busser/ui'
 
-  module Command
+module Busser
 
-    # Plugin commands.
+  module Thor
+
+    # Base class for all Thor subclasses which includes useful mixins.
     #
     # @author Fletcher Nichol <fnichol@nichol.ca>
     #
-    class Plugin < KB::Thor::Base
+    class Base < ::Thor
 
-      register KB::Command::PluginInstall, "install",
-        "install PLUGIN [PLUGIN ...]", "Installs one or more plugins"
-      register KB::Command::PluginList, "list",
-        "list", "Lists installed plugins"
+      include Helpers
+      include UI
+      include ::Thor::Actions
+    end
+
+    # Base class for all Thor Group subclasses which includes useful mixins.
+    #
+    # @author Fletcher Nichol <fnichol@nichol.ca>
+    #
+    class BaseGroup < ::Thor::Group
+
+      include Helpers
+      include UI
+      include ::Thor::Actions
     end
   end
 end

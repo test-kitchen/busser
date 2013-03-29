@@ -16,35 +16,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'thor'
+require 'busser/thor'
+require 'busser/command/suite_cleanup'
+require 'busser/command/suite_path'
 
-require 'kb/helpers'
-require 'kb/ui'
+module Busser
 
-module KB
+  module Command
 
-  module Thor
-
-    # Base class for all Thor subclasses which includes useful mixins.
+    # Suite commands.
     #
     # @author Fletcher Nichol <fnichol@nichol.ca>
     #
-    class Base < ::Thor
+    class Suite < Busser::Thor::Base
 
-      include Helpers
-      include UI
-      include ::Thor::Actions
-    end
-
-    # Base class for all Thor Group subclasses which includes useful mixins.
-    #
-    # @author Fletcher Nichol <fnichol@nichol.ca>
-    #
-    class BaseGroup < ::Thor::Group
-
-      include Helpers
-      include UI
-      include ::Thor::Actions
+      register Busser::Command::SuiteCleanup, "cleanup",
+        "cleanup", "Cleans up test suite directories"
+      register Busser::Command::SuitePath, "path",
+        "path [<plugin_name>]", "Displays the directory for suite tests"
     end
   end
 end

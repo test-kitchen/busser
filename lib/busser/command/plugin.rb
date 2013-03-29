@@ -16,7 +16,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "kb/version"
+require 'busser/thor'
+require 'busser/command/plugin_install'
+require 'busser/command/plugin_list'
 
-module KB
+module Busser
+
+  module Command
+
+    # Plugin commands.
+    #
+    # @author Fletcher Nichol <fnichol@nichol.ca>
+    #
+    class Plugin < Busser::Thor::Base
+
+      register Busser::Command::PluginInstall, "install",
+        "install PLUGIN [PLUGIN ...]", "Installs one or more plugins"
+      register Busser::Command::PluginList, "list",
+        "list", "Lists installed plugins"
+    end
+  end
 end

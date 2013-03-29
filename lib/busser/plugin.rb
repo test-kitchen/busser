@@ -16,7 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-module KB
+module Busser
 
   module RunnerPlugin
   end
@@ -27,15 +27,15 @@ module KB
 
     def runner_plugins(plugin_names = nil)
       if plugin_names
-        Array(plugin_names).map { |plugin| "kb/runner_plugin/#{plugin}" }
+        Array(plugin_names).map { |plugin| "busser/runner_plugin/#{plugin}" }
       else
         all_runner_plugins
       end
     end
 
     def all_runner_plugins
-      Gem.find_files('kb/runner_plugin/*.rb').map do |file|
-        "kb/runner_plugin/#{File.basename(file).sub(/\.rb$/, '')}"
+      Gem.find_files('busser/runner_plugin/*.rb').map do |file|
+        "busser/runner_plugin/#{File.basename(file).sub(/\.rb$/, '')}"
       end
     end
 
@@ -46,12 +46,13 @@ module KB
     end
 
     def runner_class(klass)
-      KB::RunnerPlugin.const_get(klass)
+      Busser::RunnerPlugin.const_get(klass)
     end
 
     def gem_from_path(plugin_path)
       local_gem_path = "#{File.expand_path(plugin_path, $LOAD_PATH.first)}"
-      local_gemspec = File.join(File.dirname($LOAD_PATH.first), "kb.gemspec")
+      local_gemspec = File.join(
+        File.dirname($LOAD_PATH.first), "busser.gemspec")
 
       if ! Dir.glob("#{local_gem_path}#{Gem.suffix_pattern}").empty?
         Gem::Specification.load(File.expand_path(local_gemspec))

@@ -16,24 +16,35 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'kb/thor'
-require 'kb/command/plugin'
-require 'kb/command/suite'
-require 'kb/command/test'
+require 'busser/plugin'
+require 'busser/thor'
 
-module KB
+module Busser
 
-  # Main command line interface class which delegates to subcommands.
-  #
-  # @author Fletcher Nichol <fnichol@nichol.ca>
-  #
-  class CLI < Thor::Base
+  module Command
 
-    register KB::Command::Plugin, "plugin",
-      "plugin SUBCOMMAND", "Plugin subcommands"
-    register KB::Command::Suite, "suite",
-      "suite SUBCOMMAND", "Suite subcommands"
-    register KB::Command::Test, "test",
-      "test [PLUGIN ...]", "Runs test suites"
+    # Plugin list command.
+    #
+    # @author Fletcher Nichol <fnichol@nichol.ca>
+    #
+    class PluginList < Busser::Thor::BaseGroup
+
+      def list
+        if plugin_data.empty?
+          say "No plugins installed yet"
+        else
+          print_table([["Plugin", "Version"]] + plugin_data)
+        end
+      end
+
+      private
+
+      def plugin_data
+        @plugin_data ||= Busser::Plugin.runner_plugins.map do |path|
+          spec = Busser::Plugin.gem_from_path(path)
+          [File.basename(path), (spec && spec.version)]
+        end
+      end
+    end
   end
 end

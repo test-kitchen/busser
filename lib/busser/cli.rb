@@ -16,28 +16,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'kb/thor'
+require 'busser/thor'
+require 'busser/command/plugin'
+require 'busser/command/suite'
+require 'busser/command/test'
 
-module KB
+module Busser
 
-  module Command
+  # Main command line interface class which delegates to subcommands.
+  #
+  # @author Fletcher Nichol <fnichol@nichol.ca>
+  #
+  class CLI < Thor::Base
 
-    # Suite cleanup command.
-    #
-    # @author Fletcher Nichol <fnichol@nichol.ca>
-    #
-    class SuiteCleanup < KB::Thor::BaseGroup
-
-      def cleanup
-        if suite_path.directory?
-          Pathname.glob(suite_path + "*").each do |dir|
-            info "Removing #{dir}"
-            dir.rmtree
-          end
-        else
-          info "Suite path directory #{suite_path} does not exist, skipping."
-        end
-      end
-    end
+    register Busser::Command::Plugin, "plugin",
+      "plugin SUBCOMMAND", "Plugin subcommands"
+    register Busser::Command::Suite, "suite",
+      "suite SUBCOMMAND", "Suite subcommands"
+    register Busser::Command::Test, "test",
+      "test [PLUGIN ...]", "Runs test suites"
   end
 end

@@ -16,23 +16,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'kb/thor'
+require 'pathname'
 
-module KB
+module Busser
 
-  module Command
+  module Helpers
 
-    # Suite path command.
-    #
-    # @author Fletcher Nichol <fnichol@nichol.ca>
-    #
-    class SuitePath < KB::Thor::BaseGroup
+    module_function
 
-      argument :suite_name, :required => false
+    def suite_path(name = nil)
+      path = root_path + "suites"
+      path += name if name
+      path
+    end
 
-      def path
-        say suite_path(suite_name)
-      end
+    def root_path
+      Pathname.new(ENV['BUSSER_ROOT'] || "/opt/busser")
     end
   end
 end
