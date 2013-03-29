@@ -17,6 +17,7 @@
 # limitations under the License.
 
 require 'busser/thor'
+require 'busser/command/deserialize'
 require 'busser/command/plugin'
 require 'busser/command/setup'
 require 'busser/command/suite'
@@ -30,12 +31,19 @@ module Busser
   #
   class CLI < Thor::Base
 
+    register Busser::Command::Deserialize, "deserialize",
+      "deserialize", "Takes a Base64 file stream and creates a local file"
+    tasks["deserialize"].options = Busser::Command::Deserialize.class_options
+
     register Busser::Command::Setup, "setup",
       "setup", "Creates a Busser home"
+
     register Busser::Command::Plugin, "plugin",
       "plugin SUBCOMMAND", "Plugin subcommands"
+
     register Busser::Command::Suite, "suite",
       "suite SUBCOMMAND", "Suite subcommands"
+
     register Busser::Command::Test, "test",
       "test [PLUGIN ...]", "Runs test suites"
   end
