@@ -44,11 +44,12 @@ module Busser
 
       def install_gem(plugin)
         name, version = plugin.split("@")
+        install_arg = name =~ /\.gem$/ ? name : new_dep(name, version)
 
         if gem_installed?(name, version)
           info "#{plugin} plugin already installed"
         else
-          spec = dep_installer.install(new_dep(name, version)).first
+          spec = dep_installer.install(install_arg).first
           info "Plugin #{plugin} installed (version #{spec.version})"
         end
       end
