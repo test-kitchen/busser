@@ -1,3 +1,11 @@
+begin
+  require 'aruba/cucumber'
+rescue LoadError
+  abort "The aruba gem must be in your development dependencies"
+end
+
+require 'busser/cucumber/hooks'
+
 require 'tmpdir'
 require 'pathname'
 
@@ -24,6 +32,11 @@ Given(/^a suite directory named "(.*?)"$/) do |name|
   FileUtils.mkdir_p(File.join(ENV['BUSSER_ROOT'], "suites", name))
 end
 
+Given(/^a file in suite "(.*?)" named "(.*?)" with:$/) do |suite, file, content|
+  file_name = File.join(ENV['BUSSER_ROOT'], "suites", suite, file)
+  write_file(file_name, content)
+end
+
 Given(/^a sandboxed GEM_HOME directory named "(.*?)"$/) do |name|
   backup_envvar('GEM_HOME')
   backup_envvar('GEM_PATH')
@@ -46,9 +59,9 @@ Then(/^the suite directory named "(.*?)" should not exist$/) do |name|
   check_directory_presence([directory], false)
 end
 
-Then(/^a gem named "(.*?)" is installed with version "(.*?)"$/) do |name, version|
+Then(/^a gem named "(.*?)" is installed with version "(.*?)"$/) do |name, ver|
   unbundlerize do
-    run_simple(unescape("gem list #{name} --version #{version} -i"), true, nil)
+    run_simple(unescape("gem list #{name} --version #{ver} -i"), true, nil)
   end
 end
 
