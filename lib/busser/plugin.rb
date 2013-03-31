@@ -46,7 +46,7 @@ module Busser
     def require!(plugin_path)
       require plugin_path
     rescue LoadError => e
-      die "Could not load #{plugin_path} (#{e.class}: #{e.message})"
+      Busser::UI.die "Could not load #{plugin_path} (#{e.class}: #{e.message})"
     end
 
     def runner_class(klass)

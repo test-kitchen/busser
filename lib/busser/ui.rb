@@ -22,6 +22,8 @@ module Busser
 
   module UI
 
+    module_function
+
     def banner(msg)
       say("-----> #{msg}")
     end
