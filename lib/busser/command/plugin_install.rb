@@ -31,6 +31,9 @@ module Busser
 
       argument :plugins, :type => :array
 
+      class_option :force_postinstall, :type => :boolean, :default => false,
+        :desc => "Run the plugin's postinstall if it is already installed"
+
       def install_all
         silence_gem_ui!
         plugins.each { |plugin| install(plugin) }
@@ -39,7 +42,10 @@ module Busser
       private
 
       def install(plugin)
-        install_gem(plugin)
+        if options[:force_postinstall] || install_gem(plugin)
+          load_plugin(plugin)
+          run_postinstall(plugin)
+        end
       end
 
       def install_gem(plugin)
@@ -48,14 +54,33 @@ module Busser
 
         if internal_plugin?(name) || gem_installed?(name, version)
           info "#{plugin} plugin already installed"
+
+          return false
         else
           spec = dep_installer.install(install_arg).first
+          Gem.clear_paths
           info "Plugin #{plugin} installed (version #{spec.version})"
+
+          return true
+        end
+      end
+
+      def load_plugin(plugin)
+        path = Busser::Plugin.runner_plugin(plugin.sub(/^busser-/, ''))
+        Busser::Plugin.require!(path)
+      end
+
+      def run_postinstall(plugin)
+        class_string = ::Thor::Util.camel_case(plugin.sub(/^busser-/, ''))
+        klass = Busser::Plugin.runner_class(class_string)
+        if klass.respond_to?(:run_postinstall)
+          banner "Running postinstall for #{plugin} plugin"
+          klass.run_postinstall
         end
       end
 
       def internal_plugin?(name)
-        path = Busser::Plugin.runner_plugins(name.sub(/^busser-/, '')).first
+        path = Busser::Plugin.runner_plugin(name.sub(/^busser-/, ''))
 
         Busser::Plugin.gem_from_path(path)
       end

@@ -27,6 +27,15 @@ module Busser
     # @author Fletcher Nichol <fnichol@nichol.ca>
     #
     class Base < Busser::Thor::BaseGroup
+
+      def self.postinstall(&block)
+        (class << self; self; end).send(:define_method, :run_postinstall) do
+          klass = Class.new(Busser::Thor::BaseGroup) do
+            define_method(:postinstall, &block)
+          end
+          klass.start
+        end
+      end
     end
   end
 end

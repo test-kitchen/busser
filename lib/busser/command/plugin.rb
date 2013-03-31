@@ -32,6 +32,8 @@ module Busser
 
       register Busser::Command::PluginInstall, "install",
         "install PLUGIN [PLUGIN ...]", "Installs one or more plugins"
+      tasks["install"].options = Busser::Command::PluginInstall.class_options
+
       register Busser::Command::PluginList, "list",
         "list", "Lists installed plugins"
     end

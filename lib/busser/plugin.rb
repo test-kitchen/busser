@@ -25,9 +25,13 @@ module Busser
 
     module_function
 
+    def runner_plugin(plugin_name)
+      "busser/runner_plugin/#{plugin_name}"
+    end
+
     def runner_plugins(plugin_names = nil)
       if plugin_names
-        Array(plugin_names).map { |plugin| "busser/runner_plugin/#{plugin}" }
+        Array(plugin_names).map { |plugin| runner_plugin(plugin) }
       else
         all_runner_plugins
       end

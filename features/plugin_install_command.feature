@@ -4,7 +4,7 @@ Feature: Plugin install command
   I want the ability to install test runner plugins
 
   Background:
-    Given a sandboxed GEM_HOME directory named "busser-plugin"
+    Given a sandboxed GEM_HOME directory named "busser-plugin-gem-home"
 
   Scenario: Installing a missing plugin
     When I run `busser plugin install rack`
@@ -29,3 +29,11 @@ Feature: Plugin install command
     When I run `busser plugin install dummy`
     Then the output should contain "dummy plugin already installed"
     And the exit status should be 0
+
+  Scenario: Forcing postinstall script for an internal plugin
+    When I successfully run `busser plugin install dummy --force-postinstall`
+    Then a directory named "dummy" should exist
+    And the file "dummy/foobar.txt" should contain exactly:
+    """
+    The Dummy Driver.
+    """

@@ -34,12 +34,19 @@ module Busser
       def perform
         Busser::Plugin.runner_plugins(plugins).each do |runner_path|
           runner = File.basename(runner_path)
+          next if skip_runner?(runner)
           klass = ::Thor::Util.camel_case(runner)
 
           banner "Running #{runner} test suite"
           Busser::Plugin.require!(runner_path)
           invoke Busser::Plugin.runner_class(klass)
         end
+      end
+
+      private
+
+      def skip_runner?(runner)
+        runner == "dummy" && ! Array(plugins).include?("dummy")
       end
     end
   end

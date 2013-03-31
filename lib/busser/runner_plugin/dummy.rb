@@ -24,7 +24,17 @@ require 'busser/runner_plugin'
 #
 class Busser::RunnerPlugin::Dummy < Busser::RunnerPlugin::Base
 
+  postinstall do
+    empty_directory("dummy")
+    create_file("dummy/foobar.txt", "The Dummy Driver.")
+  end
+
   def test
     banner "[dummy] Running"
+    if File.exists?(File.join(suite_path("dummy"), "foobar.txt"))
+      info "[dummy] The postinstall script has been called"
+    else
+      warn "[dummy] The postinstall script was not called"
+    end
   end
 end
