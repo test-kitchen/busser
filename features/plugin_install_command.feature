@@ -24,3 +24,8 @@ Feature: Plugin install command
     Then the output should contain "Plugin rack@1.3.10 installed (version 1.3.10)"
     And the exit status should be 0
     And a gem named "rack" is installed with version "1.3.10"
+
+  Scenario: Installing an internal plugin
+    When I run `busser plugin install dummy`
+    Then the output should contain "dummy plugin already installed"
+    And the exit status should be 0

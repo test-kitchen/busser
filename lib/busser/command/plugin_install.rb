@@ -46,12 +46,18 @@ module Busser
         name, version = plugin.split("@")
         install_arg = name =~ /\.gem$/ ? name : new_dep(name, version)
 
-        if gem_installed?(name, version)
+        if internal_plugin?(name) || gem_installed?(name, version)
           info "#{plugin} plugin already installed"
         else
           spec = dep_installer.install(install_arg).first
           info "Plugin #{plugin} installed (version #{spec.version})"
         end
+      end
+
+      def internal_plugin?(name)
+        path = Busser::Plugin.runner_plugins(name.sub(/^busser-/, '')).first
+
+        Busser::Plugin.gem_from_path(path)
       end
 
       def gem_installed?(name, version)
