@@ -8,27 +8,27 @@ Feature: Plugin install command
     And a sandboxed GEM_HOME directory named "busser-plugin-gem-home"
 
   Scenario: Installing a missing plugin
-    When I run `busser plugin install rack`
-    Then the output should contain "Plugin rack installed"
+    When I run `busser plugin install busser-bash`
+    Then the output should contain "Plugin bash installed"
     And the exit status should be 0
-    And a gem named "rack" is installed
+    And a gem named "busser-bash" is installed
 
   Scenario: Installing a missing plugin with a version
-    When I run `busser plugin install rack@1.2.8`
-    Then the output should contain "Plugin rack@1.2.8 installed (version 1.2.8)"
+    When I run `busser plugin install busser-bash@0.1.0`
+    Then the output should contain "Plugin bash installed (version 0.1.0)"
     And the exit status should be 0
-    And a gem named "rack" is installed with version "1.2.8"
+    And a gem named "busser-bash" is installed with version "0.1.0"
 
   Scenario: Installing a specfic newer version of an existing plugin
-    When I successfully run `busser plugin install rack@1.2.8`
-    And I run `busser plugin install rack@1.3.10`
-    Then the output should contain "Plugin rack@1.3.10 installed (version 1.3.10)"
+    When I successfully run `busser plugin install busser-bash@0.1.0`
+    And I run `busser plugin install busser-bash@0.1.1`
+    Then the output should contain "Plugin bash installed (version 0.1.1)"
     And the exit status should be 0
-    And a gem named "rack" is installed with version "1.3.10"
+    And a gem named "busser-bash" is installed with version "0.1.1"
 
   Scenario: Installing an internal plugin
     When I run `busser plugin install dummy`
-    Then the output should contain "dummy plugin already installed"
+    Then the output should contain "Plugin dummy already installed"
     And the exit status should be 0
 
   Scenario: Forcing postinstall script for an internal plugin

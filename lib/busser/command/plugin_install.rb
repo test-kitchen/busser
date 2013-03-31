@@ -42,47 +42,48 @@ module Busser
       private
 
       def install(plugin)
-        if options[:force_postinstall] || install_gem(plugin)
-          load_plugin(plugin)
-          run_postinstall(plugin)
+        gem_name, version = plugin.split("@")
+        name = gem_name.sub(/^busser-/, '')
+
+        if options[:force_postinstall] || install_gem(gem_name, version, name)
+          load_plugin(name)
+          run_postinstall(name)
         end
       end
 
-      def install_gem(plugin)
-        name, version = plugin.split("@")
-        install_arg = name =~ /\.gem$/ ? name : new_dep(name, version)
+      def install_gem(gem, version, name)
+        install_arg = gem =~ /\.gem$/ ? gem : new_dep(gem, version)
 
-        if internal_plugin?(name) || gem_installed?(name, version)
-          info "#{plugin} plugin already installed"
+        if internal_plugin?(name) || gem_installed?(gem, version)
+          info "Plugin #{name} already installed"
 
           return false
         else
-          spec = dep_installer.install(install_arg).first
+          spec = dep_installer.install(install_arg).find do |spec|
+            spec.name == gem
+          end
           Gem.clear_paths
-          info "Plugin #{plugin} installed (version #{spec.version})"
+          info "Plugin #{name} installed (version #{spec.version})"
 
           return true
         end
       end
 
-      def load_plugin(plugin)
-        path = Busser::Plugin.runner_plugin(plugin.sub(/^busser-/, ''))
-        Busser::Plugin.require!(path)
+      def load_plugin(name)
+        Busser::Plugin.require!(Busser::Plugin.runner_plugin(name))
       end
 
-      def run_postinstall(plugin)
-        class_string = ::Thor::Util.camel_case(plugin.sub(/^busser-/, ''))
-        klass = Busser::Plugin.runner_class(class_string)
+      def run_postinstall(name)
+        klass = Busser::Plugin.runner_class(::Thor::Util.camel_case(name))
         if klass.respond_to?(:run_postinstall)
-          banner "Running postinstall for #{plugin} plugin"
+          banner "Running postinstall for #{name} plugin"
           klass.run_postinstall
         end
       end
 
       def internal_plugin?(name)
-        path = Busser::Plugin.runner_plugin(name.sub(/^busser-/, ''))
-
-        Busser::Plugin.gem_from_path(path)
+        spec = Busser::Plugin.gem_from_path(Busser::Plugin.runner_plugin(name))
+        spec && spec.name == "busser"
       end
 
       def gem_installed?(name, version)
