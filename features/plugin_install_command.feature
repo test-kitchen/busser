@@ -4,7 +4,8 @@ Feature: Plugin install command
   I want the ability to install test runner plugins
 
   Background:
-    Given a sandboxed GEM_HOME directory named "busser-plugin-gem-home"
+    Given a non bundler environment
+    And a sandboxed GEM_HOME directory named "busser-plugin-gem-home"
 
   Scenario: Installing a missing plugin
     When I run `busser plugin install rack`

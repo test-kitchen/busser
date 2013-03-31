@@ -34,6 +34,13 @@ Given(/^a sandboxed GEM_HOME directory named "(.*?)"$/) do |name|
   @busser_root_dirs << gem_home
 end
 
+Given(/^a non bundler environment$/) do
+  %w[BUNDLER_EDITOR BUNDLE_BIN_PATH BUNDLE_GEMFILE RUBYOPT].each do |key|
+    backup_envvar(key)
+    ENV.delete(key)
+  end
+end
+
 Then(/^the suite directory named "(.*?)" should not exist$/) do |name|
   directory = File.join(ENV['BUSSER_ROOT'], "suites", name)
   check_directory_presence([directory], false)
