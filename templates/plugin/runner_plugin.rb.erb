@@ -1,0 +1,16 @@
+# -*- encoding: utf-8 -*-
+#
+<%= license_comment %>
+
+require 'busser/runner_plugin'
+
+# <%= config[:klass_name] %> runner plugin for Busser
+#
+# @author <%= config[:author] %> <<%= config[:email] %>>
+#
+class Busser::RunnerPlugin::<%= config[:klass_name] %> < Busser::RunnerPlugin::Base
+
+  def test
+    # your implementation here
+  end
+end

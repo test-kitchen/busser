@@ -17,6 +17,7 @@
 # limitations under the License.
 
 require 'busser/thor'
+require 'busser/command/plugin_create'
 require 'busser/command/plugin_install'
 require 'busser/command/plugin_list'
 
@@ -29,6 +30,10 @@ module Busser
     # @author Fletcher Nichol <fnichol@nichol.ca>
     #
     class Plugin < Busser::Thor::Base
+
+      register Busser::Command::PluginCreate, "create",
+        "create [PLUGIN_NAME]", "Creates a new Busser plugin gem project"
+      tasks["create"].options = Busser::Command::PluginCreate.class_options
 
       register Busser::Command::PluginInstall, "install",
         "install PLUGIN [PLUGIN ...]", "Installs one or more plugins"

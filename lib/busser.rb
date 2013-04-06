@@ -16,7 +16,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "busser/version"
+require 'pathname'
+
+require 'busser/version'
 
 module Busser
+
+  # Returns the root path of the Busser gem source code.
+  #
+  # @return [Pathname] root path of gem
+  def self.source_root
+    @source_root ||= Pathname.new(File.expand_path('../../', __FILE__))
+  end
 end
