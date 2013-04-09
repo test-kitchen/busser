@@ -16,7 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'rubygems/dependency_installer'
+require 'busser/rubygems'
 require 'busser/thor'
 
 module Busser
@@ -29,14 +29,17 @@ module Busser
     #
     class PluginInstall < Busser::Thor::BaseGroup
 
+      include Busser::RubyGems
+
       argument :plugins, :type => :array
 
       class_option :force_postinstall, :type => :boolean, :default => false,
         :desc => "Run the plugin's postinstall if it is already installed"
 
       def install_all
-        silence_gem_ui!
-        plugins.each { |plugin| install(plugin) }
+        silence_gem_ui do
+          plugins.each { |plugin| install(plugin) }
+        end
       end
 
       private
@@ -45,26 +48,21 @@ module Busser
         gem_name, version = plugin.split("@")
         name = gem_name.sub(/^busser-/, '')
 
-        if options[:force_postinstall] || install_gem(gem_name, version, name)
+        new_install = install_plugin_gem(gem_name, version, name)
+
+        if options[:force_postinstall] || new_install
           load_plugin(name)
           run_postinstall(name)
         end
       end
 
-      def install_gem(gem, version, name)
-        install_arg = gem =~ /\.gem$/ ? gem : new_dep(gem, version)
-
+      def install_plugin_gem(gem, version, name)
         if internal_plugin?(name) || gem_installed?(gem, version)
           info "Plugin #{name} already installed"
-
           return false
         else
-          spec = dep_installer.install(install_arg).find do |spec|
-            spec.name == gem
-          end
-          Gem.clear_paths
+          spec = install_gem(gem, version)
           info "Plugin #{name} installed (version #{spec.version})"
-
           return true
         end
       end
@@ -84,44 +82,6 @@ module Busser
       def internal_plugin?(name)
         spec = Busser::Plugin.gem_from_path(Busser::Plugin.runner_plugin(name))
         spec && spec.name == "busser"
-      end
-
-      def gem_installed?(name, version)
-        installed = Array(Gem::Specification.find_all_by_name(name, version))
-        version = latest_version(name) if version.nil?
-
-        installed.find { |spec| spec.version.to_s == version }
-      end
-
-      def latest_version(name)
-        available_gems = dep_installer.find_gems_with_sources(new_dep(name))
-
-        spec, source = if available_gems.respond_to?(:last)
-          # DependencyInstaller sorts the results such that the last one is
-          # always the one it considers best.
-          spec_with_source = available_gems.last
-          spec_with_source && spec_with_source
-        else
-          # Rubygems 2.0 returns a Gem::Available set, which is a
-          # collection of AvailableSet::Tuple structs
-          available_gems.pick_best!
-          best_gem = available_gems.set.first
-          best_gem && [best_gem.spec, best_gem.source]
-        end
-
-        spec && spec.version && spec.version.to_s
-      end
-
-      def silence_gem_ui!
-        Gem::DefaultUserInteraction.ui = Gem::SilentUI.new
-      end
-
-      def dep_installer
-        Gem::DependencyInstaller.new
-      end
-
-      def new_dep(name, version = nil)
-        Gem::Dependency.new(name, version)
       end
     end
   end
