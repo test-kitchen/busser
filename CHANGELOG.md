@@ -1,3 +1,10 @@
+## 0.3.2 / 2013-04-10
+
+### Improvements
+
+* Add more cucumber steps for vendor paths. ([@fnichol][])
+
+
 ## 0.3.1 / 2013-04-10
 
 ### Bug fixes
