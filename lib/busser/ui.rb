@@ -46,6 +46,16 @@ module Busser
       end
     end
 
+    def run_ruby_script!(cmd, config = {})
+      config = { :capture => false, :verbose => false }.merge(config)
+      run_ruby_script(cmd, config)
+
+      if $?.success?
+        true
+      else
+        die "Ruby Script[#{cmd}] exit code was #{$?.exitstatus}", $?.exitstatus
+      end
+    end
     def die(msg, exitstatus = 1)
       $stderr.puts(msg)
       exit(exitstatus)
