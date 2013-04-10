@@ -69,8 +69,6 @@ module Busser
       Gem::DefaultUserInteraction.ui = interaction
     end
 
-    private
-
     def dep_installer
       Gem::DependencyInstaller.new
     end

@@ -18,6 +18,8 @@
 
 require 'pathname'
 
+require 'busser/rubygems'
+
 module Busser
 
   module Helpers
@@ -43,6 +45,10 @@ module Busser
     def chef_apply(config = {}, &block)
       require 'busser/chef_apply'
       ChefApply.new(config, &block).converge
+    end
+
+    def install_gem(gem, version = nil)
+      Busser::RubyGems.install_gem(gem, version)
     end
   end
 end
