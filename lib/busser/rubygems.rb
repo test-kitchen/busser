@@ -28,7 +28,11 @@ module Busser
       installed = Array(Gem::Specification.find_all_by_name(name, version))
       version = latest_gem_version(name) if version.nil?
 
-      installed.find { |spec| spec.version.to_s == version }
+      if version.nil?
+        ! installed.empty?
+      else
+        installed.find { |spec| spec.version.to_s == version }
+      end
     end
 
     def install_gem(gem, version)
