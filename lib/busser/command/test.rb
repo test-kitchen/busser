@@ -39,6 +39,7 @@ module Busser
 
           banner "Running #{runner} test suite"
           Busser::Plugin.require!(runner_path)
+          prepare_suite(runner)
           invoke Busser::Plugin.runner_class(klass)
         end
       end
@@ -47,6 +48,29 @@ module Busser
 
       def skip_runner?(runner)
         runner == "dummy" && ! Array(plugins).include?("dummy")
+      end
+
+      def prepare_suite(runner)
+        run_prepare_sh(runner)
+        run_prepare_recipe(runner)
+      end
+
+      def run_prepare_sh(runner)
+        prepare_sh_script = suite_path(runner).join("prepare.sh")
+
+        if prepare_sh_script.exist?
+          banner "Preparing #{runner} suite with #{prepare_sh_script}"
+          run!("bash #{prepare_sh_script}")
+        end
+      end
+
+      def run_prepare_recipe(runner)
+        prepare_recipe = suite_path(runner).join("prepare_recipe.rb")
+
+        if prepare_recipe.exist?
+          banner "Preparing #{runner} suite with #{prepare_recipe}"
+          chef_apply(:file => prepare_recipe)
+        end
       end
     end
   end

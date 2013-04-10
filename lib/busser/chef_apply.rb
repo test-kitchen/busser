@@ -68,7 +68,7 @@ module Busser
       recipe = Chef::Recipe.new(COOKBOOK_NAME, COOKBOOK_RECIPE, run_context)
 
       if config[:file]
-        recipe.from_file(config[:file])
+        recipe.from_file(config[:file].to_s)
       else
         recipe.instance_eval(&apply_block)
       end
