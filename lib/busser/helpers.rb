@@ -30,6 +30,12 @@ module Busser
       path
     end
 
+    def vendor_path(product = nil)
+      path = root_path + "vendor"
+      path += product if product
+      path
+    end
+
     def root_path
       Pathname.new(ENV['BUSSER_ROOT'] || "/opt/busser")
     end
