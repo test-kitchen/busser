@@ -1,3 +1,10 @@
+## 0.3.1 / 2013-04-10
+
+### Bug fixes
+
+* If gem is installed but not on RubyGems, then pass #gem_installed?. ([@fnichol][])
+
+
 ## 0.3.0 / 2013-04-09
 
 ### New features
