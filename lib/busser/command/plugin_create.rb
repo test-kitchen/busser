@@ -43,6 +43,7 @@ module Busser
         create_core_files
         create_source_files
         create_features_files
+        initialize_git
       end
 
       private
@@ -95,6 +96,13 @@ module Busser
           "features_test_command.feature.erb",
           "features/test_command.feature"
         )
+      end
+
+      def initialize_git
+        inside(target_dir) do
+          run("git init")
+          run("git add .")
+        end
       end
 
       def create_template(erb, dest)
