@@ -7,8 +7,10 @@ rvm:
 - ruby-head
 
 env:
-  - RUBYGEMS_VERSION=2.0.3
-  - RUBYGEMS_VERSION=1.8.25
+  - RUBYGEMS_VERSION=2.0.3 CHEF_VERSION=11.4.0
+  - RUBYGEMS_VERSION=2.0.3 CHEF_VERSION=10.24.0
+  - RUBYGEMS_VERSION=1.8.25 CHEF_VERSION=11.4.0
+  - RUBYGEMS_VERSION=1.8.25 CHEF_VERSION=10.24.0
 
 before_install:
   - gem update --system $RUBYGEMS_VERSION
@@ -17,3 +19,5 @@ before_install:
 matrix:
   allow_failures:
   - rvm: ruby-head
+  - rvm: 2.0.0
+    env: RUBYGEMS_VERSION=2.0.3 CHEF_VERSION=11.4.0
