@@ -14,7 +14,7 @@ Feature: Plugin create command
     And the file "busser-junit/Rakefile" should contain "task :stats"
     And the file "busser-junit/README.md" should contain:
     """
-    busser plugin install busser-junit
+    Busser::RunnerPlugin::Junit
     """
     And the file "busser-junit/busser-junit.gemspec" should contain:
     """

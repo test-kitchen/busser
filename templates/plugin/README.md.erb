@@ -1,21 +1,41 @@
-# <%= config[:gem_name] %>
+# <a name="title"></a> Busser::<%= config[:type_klass_name] %>::<%= config[:klass_name] %>
 
-<%= config[:klass_name] %> runner plugin for Busser
+A Busser <%= config[:type] %> plugin for <%= config[:klass_name] %>
 
-## Installation
+## <a name="installation"></a> Installation and Setup
 
-When using Busser directly:
+Please read the Busser [plugin usage][plugin_usage] page for more details.
 
-    busser plugin install <%= config[:gem_name] %>
+## <a name="usage"></a> Usage
 
-## Usage
+**TODO:** Write documentation explaining the structure/format of testing files.
 
-TODO: Write usage instructions here
+## <a name="development"></a> Development
 
-## Contributing
+* Source hosted at [GitHub][repo]
+* Report issues/questions/feature requests on [GitHub Issues][issues]
 
-1. Fork it
+Pull requests are very welcome! Make sure your patches are well tested.
+Ideally create a topic branch for every separate change you make. For
+example:
+
+1. Fork the repo
 2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
+3. Commit your changes (`git commit -am 'Added some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+## <a name="authors"></a> Authors
+
+Created and maintained by [<%= config[:author] %>][author] (<<%= config[:email] %>>)
+
+## <a name="license"></a> License
+
+<%= config[:license_string] %> (see [LICENSE][license])
+
+
+[author]:           https://github.com/enter-github-user
+[issues]:           https://github.com/enter-github-user/<%= config[:gem_name] %>/issues
+[license]:          https://github.com/enter-github-user/<%= config[:gem_name] %>/blob/master/LICENSE
+[repo]:             https://github.com/enter-github-user/<%= config[:gem_name] %>
+[plugin_usage]:     http://docs.kitchen-ci.org/busser/plugin-usage
