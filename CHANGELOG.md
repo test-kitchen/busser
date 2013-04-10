@@ -1,3 +1,11 @@
+## 0.4.0 / 2013-04-10
+
+### New features
+
+* Add Busser::Helpers.install_gem. ([@fnichol][])
+* Add Busser::UI.run_ruby_script! (dies on nonzero exit). ([@fnichol][])
+
+
 ## 0.3.2 / 2013-04-10
 
 ### Improvements
