@@ -1,3 +1,16 @@
+## 0.3.0 / 2013-04-09
+
+### New features
+
+* Add `busser plugin create` command to help create new plugin gem projects. ([@fnichol][])
+* Add #chef_apply to Busser::Helpers; chef-apply inline baby! ([@fnichol][])
+* Implement execution of prepare.sh/prepare_recipe.rb before suite test. ([@fnichol][])
+
+### Improvements
+
+* Add Busser::Helpers.vendor_path helper. ([@fnichol][])
+
+
 ## 0.2.0 / 2013-03-31
 
 ### New features
