@@ -6,6 +6,7 @@ Feature: Plugin install command
   Background:
     Given a non bundler environment
     And a sandboxed GEM_HOME directory named "busser-plugin-gem-home"
+    And a test BUSSER_ROOT directory named "busser-plugin-install"
 
   Scenario: Installing a missing plugin
     When I run `busser plugin install busser-bash`
@@ -33,8 +34,8 @@ Feature: Plugin install command
 
   Scenario: Forcing postinstall script for an internal plugin
     When I successfully run `busser plugin install dummy --force-postinstall`
-    Then a directory named "dummy" should exist
-    And the file "dummy/foobar.txt" should contain exactly:
+    Then the suite directory named "dummy" should exist
+    And the suite file "dummy/foobar.txt" should contain exactly:
     """
     The Dummy Driver.
     """

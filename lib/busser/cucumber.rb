@@ -54,9 +54,19 @@ Given(/^a non bundler environment$/) do
   end
 end
 
+Then(/^the suite directory named "(.*?)" should exist$/) do |name|
+  directory = File.join(ENV['BUSSER_ROOT'], "suites", name)
+  check_directory_presence([directory], true)
+end
+
 Then(/^the suite directory named "(.*?)" should not exist$/) do |name|
   directory = File.join(ENV['BUSSER_ROOT'], "suites", name)
   check_directory_presence([directory], false)
+end
+
+Then(/^the suite file "(.*?)" should contain exactly:$/) do |file, content|
+  file_name = File.join(ENV['BUSSER_ROOT'], "suites", file)
+  check_exact_file_content(file_name, content)
 end
 
 Then(/^a gem named "(.*?)" is installed with version "(.*?)"$/) do |name, ver|

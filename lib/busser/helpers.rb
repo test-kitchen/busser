@@ -33,5 +33,10 @@ module Busser
     def root_path
       Pathname.new(ENV['BUSSER_ROOT'] || "/opt/busser")
     end
+
+    def chef_apply(config = {}, &block)
+      require 'busser/chef_apply'
+      ChefApply.new(config, &block).converge
+    end
   end
 end

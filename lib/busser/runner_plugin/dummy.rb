@@ -24,9 +24,23 @@ require 'busser/runner_plugin'
 #
 class Busser::RunnerPlugin::Dummy < Busser::RunnerPlugin::Base
 
+  # Example postinstall block that will be executed after the plugin is
+  # installed. All Thor actions, and Busser::Helper methods are available for
+  # use.
+  #
   postinstall do
-    empty_directory("dummy")
-    create_file("dummy/foobar.txt", "The Dummy Driver.")
+    # ensure that dummy_path gets pulled into the chef_apply block closure,
+    # otherwise the Chef will not understand dummy_path in its run context
+    dummy_path = suite_path("dummy").to_s
+
+    # expensive operation delegating a directory creation to Chef, but imagine
+    # using resources such as package, remote_file, etc.
+    chef_apply do
+      directory(dummy_path) { recursive true }
+    end
+
+    # create a dummy file
+    create_file("#{dummy_path}/foobar.txt", "The Dummy Driver.")
   end
 
   def test
