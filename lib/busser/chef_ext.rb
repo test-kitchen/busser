@@ -21,15 +21,20 @@ require 'chef/providers'
 require 'chef/resources'
 require 'chef/cookbook_version'
 
+# Monkey patches to Chef core classes to allow for chef-apply functionality.
 class Chef
+
+  # Backwards compatible shim for older Chef clients.
   class Client
     attr_reader :events
   end
 
-  # https://github.com/sometimesfood/sandwich/commit/d3540feade873929daaf78312d30a6729eb00bc3
-
   # Chef::CookbookVersion, monkey patched to use simpler file source
-  # paths (always uses local files instead of manifest records)
+  # paths (always uses local files instead of manifest records).
+  #
+  # Implementation from the sandwich project at:
+  # https://github.com/sometimesfood/sandwich
+  #
   class CookbookVersion
     # Determines the absolute source filename on disk for various file
     # resources from their relative path

@@ -20,6 +20,10 @@ require 'busser/chef_ext'
 
 module Busser
 
+  # A modified re-implementation of chef-apply which ships with Chef 11 gems.
+  #
+  # @author Fletcher Nichol <fnichol@nichol.ca>
+  #
   class ChefApply
 
     def initialize(config = {}, &block)
