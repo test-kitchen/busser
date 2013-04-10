@@ -21,3 +21,5 @@ matrix:
   - rvm: ruby-head
   - rvm: 2.0.0
     env: RUBYGEMS_VERSION=2.0.3 CHEF_VERSION=11.4.0
+  - rvm: 2.0.0
+    env: RUBYGEMS_VERSION=2.0.3 CHEF_VERSION=10.24.0
