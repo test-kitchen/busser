@@ -1,3 +1,10 @@
+## 0.4.1 / 2013-04-23
+
+### Improvements
+
+* Add method to Drop SSL verify peer to VERIFY_NONE within a given block (see commit for explanation). ([@fnichol][])
+
+
 ## 0.4.0 / 2013-04-10
 
 ### New features
