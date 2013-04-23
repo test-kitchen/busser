@@ -16,6 +16,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+require 'openssl'
+
 require 'busser/rubygems'
 require 'busser/thor'
 
@@ -75,13 +77,29 @@ module Busser
         klass = Busser::Plugin.runner_class(::Thor::Util.camel_case(name))
         if klass.respond_to?(:run_postinstall)
           banner "Running postinstall for #{name} plugin"
-          klass.run_postinstall
+          drop_ssl_verify_peer { klass.run_postinstall }
         end
       end
 
       def internal_plugin?(name)
         spec = Busser::Plugin.gem_from_path(Busser::Plugin.runner_plugin(name))
         spec && spec.name == "busser"
+      end
+
+      # Drops SSL verify peer to VERIFY_NONE within a given block. While this
+      # is normally a massive anti-pattern and should be discouraged, there
+      # may be some Busser code that needs to be executed in an environment
+      # that lacks a proper SSL certificate store.
+      #
+      # Please use with extreme caution.
+      #
+      def drop_ssl_verify_peer
+        before = OpenSSL::SSL::VERIFY_PEER
+        OpenSSL::SSL.send(:remove_const, 'VERIFY_PEER')
+        OpenSSL::SSL.const_set('VERIFY_PEER', OpenSSL::SSL::VERIFY_NONE)
+        yield
+        OpenSSL::SSL.send(:remove_const, 'VERIFY_PEER')
+        OpenSSL::SSL.const_set('VERIFY_PEER', before)
       end
     end
   end
