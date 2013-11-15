@@ -1,6 +1,6 @@
 # Busser
 
-[![Build Status](https://travis-ci.org/test-kitchen/busser.png?branch=master)](https://travis-ci.org/fnichol/busser)
+[![Build Status](https://travis-ci.org/test-kitchen/busser.png?branch=master)](https://travis-ci.org/test-kitchen/busser)
 [![Code Climate](https://codeclimate.com/github/fnichol/busser.png)](https://codeclimate.com/github/fnichol/busser)
 
 Busser is a test setup and execution framework designed to
