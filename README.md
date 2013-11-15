@@ -1,7 +1,7 @@
 # Busser
 
 [![Build Status](https://travis-ci.org/test-kitchen/busser.png?branch=master)](https://travis-ci.org/test-kitchen/busser)
-[![Code Climate](https://codeclimate.com/github/fnichol/busser.png)](https://codeclimate.com/github/fnichol/busser)
+[![Code Climate](https://codeclimate.com/github/test-kitchen/busser.png)](https://codeclimate.com/github/test-kitchen/busser)
 
 Busser is a test setup and execution framework designed to
 work on remote nodes whose system dependencies cannot be relied upon, except
