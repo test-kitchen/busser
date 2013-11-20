@@ -20,6 +20,10 @@ require 'pathname'
 
 require 'busser/version'
 
+# Busser - Runs tests for projects in Test Kitchen.
+#
+# @author Fletcher Nichol <fnichol@nichol.ca>
+#
 module Busser
 
   # Returns the root path of the Busser gem source code.

@@ -20,6 +20,10 @@ require 'thor/shell'
 
 module Busser
 
+  # User interface methods.
+  #
+  # @author Fletcher Nichol <fnichol@nichol.ca>
+  #
   module UI
 
     module_function

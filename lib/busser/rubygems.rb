@@ -20,6 +20,10 @@ require 'rubygems/dependency_installer'
 
 module Busser
 
+  # RubyGems API abstraction logic, used to install and verify plugins.
+  #
+  # @author Fletcher Nichol <fnichol@nichol.ca>
+  #
   module RubyGems
 
     module_function

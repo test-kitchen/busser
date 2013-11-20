@@ -21,6 +21,10 @@ module Busser
   module RunnerPlugin
   end
 
+  # Plugin loading logic.
+  #
+  # @author Fletcher Nichol <fnichol@nichol.ca>
+  #
   module Plugin
 
     module_function

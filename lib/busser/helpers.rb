@@ -22,6 +22,10 @@ require 'busser/rubygems'
 
 module Busser
 
+  # Common methods used by subcommands.
+  #
+  # @author Fletcher Nichol <fnichol@nichol.ca>
+  #
   module Helpers
 
     module_function
