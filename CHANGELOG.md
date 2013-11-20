@@ -1,3 +1,11 @@
+## 0.5.0 / 2013-11-20
+
+### Improvements
+
+* Allow `busser setup` binstub script to honor gem sandboxing and a relocatable BUSSER\_ROOT. ([@fnichol][])
+* TravisCI matrix build updates. ([@fnichol][])
+
+
 ## 0.4.1 / 2013-04-23
 
 ### Improvements
