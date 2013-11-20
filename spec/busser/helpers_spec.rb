@@ -15,11 +15,11 @@ describe Busser::Helpers do
     describe "with a default root path" do
 
       it "returns a base path if no suite name is given" do
-        suite_path.to_s.must_equal "/tmp/busser/suites"
+        suite_path.to_s.must_equal "/opt/busser/suites"
       end
 
       it "returns a suite path given a suite name" do
-        suite_path("fuzzy").to_s.must_equal "/tmp/busser/suites/fuzzy"
+        suite_path("fuzzy").to_s.must_equal "/opt/busser/suites/fuzzy"
       end
     end
 
@@ -49,11 +49,11 @@ describe Busser::Helpers do
     describe "with a default root path" do
 
       it "returns a base path if no product name is given" do
-        vendor_path.to_s.must_equal "/tmp/busser/vendor"
+        vendor_path.to_s.must_equal "/opt/busser/vendor"
       end
 
       it "returns a vendor path given a product name" do
-        vendor_path("supreme").to_s.must_equal "/tmp/busser/vendor/supreme"
+        vendor_path("supreme").to_s.must_equal "/opt/busser/vendor/supreme"
       end
     end
 
