@@ -19,9 +19,10 @@ before_install:
 bundler_args: --without guard
 
 matrix:
-  allow_failures:
-  - rvm: ruby-head
+  exclude:
   - rvm: 2.0.0
     env: RUBYGEMS_VERSION=1.8.25 CHEF_VERSION=10.28.2
   - rvm: 2.0.0
     env: RUBYGEMS_VERSION=1.8.25 CHEF_VERSION=11.8.0
+  allow_failures:
+  - rvm: ruby-head
