@@ -43,7 +43,7 @@ module Busser
     end
 
     def root_path
-      Pathname.new(ENV['BUSSER_ROOT'] || "/opt/busser")
+      Pathname.new(ENV['BUSSER_ROOT'] || "/tmp/busser")
     end
 
     def chef_apply(config = {}, &block)
