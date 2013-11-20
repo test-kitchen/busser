@@ -65,17 +65,22 @@ module Busser
             DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
             # Set Busser Root path
-            export BUSSER_ROOT="#{root_path}"
+            BUSSER_ROOT="#{root_path}"
+
+            export BUSSER_ROOT
 
             # Export gem paths so that we use the isolated gems.
-            export GEM_HOME="#{gem_home}"
-            export GEM_PATH="${GEM_HOME}"
+            GEM_HOME="#{gem_home}"
+            GEM_PATH="#{gem_path}"
+            GEM_CACHE="#{gem_home}/cache"
+
+            export GEM_HOME GEM_PATH GEM_CACHE
 
             # Unset RUBYOPT, we don't want this bleeding into our runtime.
             unset RUBYOPT GEMRC
 
             # Call the actual Busser bin with our arguments
-            exec "${DIR}/ruby" "${DIR}/busser" "$@"
+            exec "${DIR}/ruby" "#{gem_bindir}/busser" "$@"
           BUSSER_BINSTUB
         end
         chmod(binstub, 0755, :verbose => false)
@@ -91,6 +96,14 @@ module Busser
 
       def gem_home
         Gem.paths.home
+      end
+
+      def gem_path
+        Gem.paths.path.join(":")
+      end
+
+      def gem_bindir
+        Gem.bindir
       end
     end
   end
