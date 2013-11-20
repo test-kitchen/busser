@@ -63,6 +63,9 @@ module Busser
             while [ -h "$SOURCE" ] ; do SOURCE="$(readlink "$SOURCE")"; done
             DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
+            # Set Busser Root path
+            export BUSSER_ROOT="#{root_path}"
+
             # Export gem paths so that we use the isolated gems.
             export GEM_HOME="#{gem_home}"
             export GEM_PATH="${GEM_HOME}"
