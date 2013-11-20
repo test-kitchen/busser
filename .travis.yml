@@ -22,6 +22,6 @@ matrix:
   allow_failures:
   - rvm: ruby-head
   - rvm: 2.0.0
-    env: RUBYGEMS_VERSION=2.0.3 CHEF_VERSION=11.8.0
+    env: RUBYGEMS_VERSION=1.8.25 CHEF_VERSION=10.28.2
   - rvm: 2.0.0
-    env: RUBYGEMS_VERSION=2.0.3 CHEF_VERSION=10.28.2
+    env: RUBYGEMS_VERSION=1.8.25 CHEF_VERSION=11.8.0
