@@ -55,6 +55,7 @@ module Busser
             # The application 'busser' is installed as part of a gem, and
             # this file is here to facilitate running it.
             #
+            [ -n "$DEBUG" ] && set -x
 
             # Get the directory where this ruby is. This will also resolve
             # any symlinks in the directory/script, so it will be the fully
