@@ -68,8 +68,9 @@ module Busser
         prepare_recipe = suite_path(runner).join("prepare_recipe.rb")
 
         if prepare_recipe.exist?
-          banner "Preparing #{runner} suite with #{prepare_recipe}"
-          chef_apply(:file => prepare_recipe)
+          warn "Apologies, but Busser no longer supports the" +
+            " prepare_recipe.rb file. Please use prepare.sh and optionally" +
+            " shell out to chef-apply in an Omnibus installtion."
         end
       end
     end

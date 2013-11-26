@@ -29,17 +29,9 @@ class Busser::RunnerPlugin::Dummy < Busser::RunnerPlugin::Base
   # use.
   #
   postinstall do
-    # ensure that dummy_path gets pulled into the chef_apply block closure,
-    # otherwise the Chef will not understand dummy_path in its run context
     dummy_path = suite_path("dummy").to_s
 
-    # expensive operation delegating a directory creation to Chef, but imagine
-    # using resources such as package, remote_file, etc.
-    chef_apply do
-      directory(dummy_path) { recursive true }
-    end
-
-    # create a dummy file
+    empty_directory(dummy_path)
     create_file("#{dummy_path}/foobar.txt", "The Dummy Driver.")
   end
 

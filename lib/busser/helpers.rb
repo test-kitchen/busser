@@ -47,8 +47,10 @@ module Busser
     end
 
     def chef_apply(config = {}, &block)
-      require 'busser/chef_apply'
-      ChefApply.new(config, &block).converge
+      warn "Apologies, but Busser no longer supports the chef_apply helper," +
+        " so the contents of this block will not be exectued. Please refactor" +
+        " your code to use Thor actions, shell out commands or another" +
+        " strategy"
     end
 
     def install_gem(gem, version = nil)
