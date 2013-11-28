@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = Busser::VERSION
   spec.authors       = ["Fletcher Nichol"]
   spec.email         = ["fnichol@nichol.ca"]
-  spec.description   = %q{Kitchen Busser - Runs tests for projects in test-kitchen}
+  spec.description   = %q{Busser - Runs tests for projects in Test Kitchen}
   spec.summary       = spec.description
-  spec.homepage      = "https://github.com/fnichol/busser"
+  spec.homepage      = "https://github.com/test-kitchen/busser"
   spec.license       = 'Apache 2.0'
 
   spec.files         = `git ls-files`.split($/)
