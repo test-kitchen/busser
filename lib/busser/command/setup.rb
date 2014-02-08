@@ -46,6 +46,7 @@ module Busser
         binstub = root_path + "bin/busser"
 
         info "Creating busser binstub"
+        File.unlink(binstub) if File.exists?(binstub)
         create_file(binstub, :verbose => false) do
           <<-BUSSER_BINSTUB.gsub(/^ {12}/, '')
             #!/usr/bin/env sh
