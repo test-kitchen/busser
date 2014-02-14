@@ -62,7 +62,7 @@ module Busser
             # resolved path.
             SOURCE="#{ruby_bin}"
             while [ -h "$SOURCE" ] ; do SOURCE="`readlink "$SOURCE"`"; done
-            DIR="`cd -P \\"\\`dirname "$SOURCE"\\`\\" && pwd`"
+            DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
 
             # Set Busser Root path
             BUSSER_ROOT="#{root_path}"
