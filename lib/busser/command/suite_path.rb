@@ -31,7 +31,7 @@ module Busser
       argument :suite_name, :required => false
 
       def path
-        say suite_path(suite_name)
+        say suite_path(suite_name).to_s
       end
     end
   end
