@@ -43,10 +43,11 @@ module Busser
     def run!(cmd)
       run(cmd, :capture => false, :verbose => false)
 
-      if $?.success?
+      if status.success?
         true
       else
-        die "Command [#{cmd}] exit code was #{$?.exitstatus}", $?.exitstatus
+        code = status.exitstatus
+        die "Command [#{cmd}] exit code was #{code}", code
       end
     end
 
@@ -54,15 +55,21 @@ module Busser
       config = { :capture => false, :verbose => false }.merge(config)
       run_ruby_script(cmd, config)
 
-      if $?.success?
+      if status.success?
         true
       else
-        die "Ruby Script[#{cmd}] exit code was #{$?.exitstatus}", $?.exitstatus
+        code = status.exitstatus
+        die "Ruby Script [#{cmd}] exit code was #{code}", code
       end
     end
+
     def die(msg, exitstatus = 1)
       $stderr.puts(msg)
       exit(exitstatus)
+    end
+
+    def status
+      $?
     end
   end
 end
