@@ -1,16 +1,17 @@
 language: ruby
 
 rvm:
+- 2.1
 - 2.0.0
 - 1.9.3
 - 1.9.2
 - ruby-head
 
 env:
-  - RUBYGEMS_VERSION=2.0.3 CHEF_VERSION=11.8.0
-  - RUBYGEMS_VERSION=2.0.3 CHEF_VERSION=10.28.2
-  - RUBYGEMS_VERSION=1.8.25 CHEF_VERSION=11.8.0
-  - RUBYGEMS_VERSION=1.8.25 CHEF_VERSION=10.28.2
+  - RUBYGEMS_VERSION=2.2.2
+  - RUBYGEMS_VERSION=2.1.11
+  - RUBYGEMS_VERSION=2.0.14
+  - RUBYGEMS_VERSION=1.8.28
 
 before_install:
   - gem update --system $RUBYGEMS_VERSION
@@ -20,9 +21,9 @@ bundler_args: --without guard
 
 matrix:
   exclude:
+  - rvm: 2.1
+    env: RUBYGEMS_VERSION=1.8.28
   - rvm: 2.0.0
-    env: RUBYGEMS_VERSION=1.8.25 CHEF_VERSION=10.28.2
-  - rvm: 2.0.0
-    env: RUBYGEMS_VERSION=1.8.25 CHEF_VERSION=11.8.0
+    env: RUBYGEMS_VERSION=1.8.28
   allow_failures:
   - rvm: ruby-head
