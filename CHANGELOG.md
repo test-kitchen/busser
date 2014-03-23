@@ -1,3 +1,10 @@
+## 0.6.2 / 2014-03-23
+
+### Bug fixes
+
+* Pull request [#8][]: Invoke prepare.sh scripts with /bin/sh for platforms without bash. ([@fnichol][])
+
+
 ## 0.6.1 / 2014-03-23
 
 ### Bug fixes
@@ -99,6 +106,7 @@
 [#5]: https://github.com/test-kitchen/busser/issues/5
 [#6]: https://github.com/test-kitchen/busser/issues/6
 [#7]: https://github.com/test-kitchen/busser/issues/7
+[#8]: https://github.com/test-kitchen/busser/issues/8
 [@fnichol]: https://github.com/fnichol
 [@jtimberman]: https://github.com/jtimberman
 [@neuhalje]: https://github.com/neuhalje

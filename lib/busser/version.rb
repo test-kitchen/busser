@@ -17,5 +17,5 @@
 # limitations under the License.
 
 module Busser
-  VERSION = "0.6.2.dev"
+  VERSION = "0.6.2"
 end
