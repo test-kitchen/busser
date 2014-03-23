@@ -60,7 +60,7 @@ module Busser
 
         if prepare_sh_script.exist?
           banner "Preparing #{runner} suite with #{prepare_sh_script}"
-          run!("bash #{prepare_sh_script}")
+          run!("/bin/sh #{prepare_sh_script}")
         end
       end
 
