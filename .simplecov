@@ -1,4 +1,4 @@
-SimpleCov.adapters.define 'gem' do
+SimpleCov.profiles.define 'gem' do
   command_name 'Specs'
 
   add_filter '.gem/'

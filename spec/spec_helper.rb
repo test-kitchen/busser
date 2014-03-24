@@ -16,9 +16,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'simplecov'
 require 'fakefs/safe'
 require 'minitest/autorun'
 require 'mocha/setup'
 
-SimpleCov.command_name "unit"
+if ENV["COVERAGE"]
+  require 'simplecov'
+  SimpleCov.command_name "unit"
+end

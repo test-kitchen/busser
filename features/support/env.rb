@@ -1,9 +1,10 @@
-require 'simplecov'
 require 'aruba/cucumber'
-
 require 'busser/cucumber'
 
-SimpleCov.command_name "features"
+if ENV["COVERAGE"]
+  require 'simplecov'
+  SimpleCov.command_name "features"
+end
 
 Before do
   @aruba_timeout_seconds = 20
