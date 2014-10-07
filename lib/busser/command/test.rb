@@ -70,7 +70,7 @@ module Busser
         if prepare_recipe.exist?
           warn "Apologies, but Busser no longer supports the" +
             " prepare_recipe.rb file. Please use prepare.sh and optionally" +
-            " shell out to chef-apply in an Omnibus installtion."
+            " shell out to chef-apply in an Omnibus installation."
         end
       end
     end
