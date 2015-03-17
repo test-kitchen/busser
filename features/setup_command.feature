@@ -16,7 +16,7 @@ Feature: Setup command
     """
     And a busser binstub file should contain:
     """
-    exec "${DIR}/ruby"
+    export BUSSER_ROOT
     """
     And the exit status should be 0
 
