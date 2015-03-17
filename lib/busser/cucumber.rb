@@ -66,7 +66,7 @@ end
 
 Then(/^the suite file "(.*?)" should contain exactly:$/) do |file, content|
   file_name = File.join(ENV['BUSSER_ROOT'], "suites", file)
-  check_exact_file_content(file_name, content)
+  check_file_content(file_name, content)
 end
 
 Then(/^the vendor directory named "(.*?)" should exist$/) do |name|
@@ -102,14 +102,19 @@ end
 
 Then(/^a busser binstub file should contain:$/) do |partial_content|
   file = File.join(ENV['BUSSER_ROOT'], %w{bin busser})
-  check_file_content(file, partial_content, true)
+  check_file_content(file, Regexp.new(Regexp.escape(partial_content)), true)
+end
+
+Then(/^a bat busser binstub file should contain:$/) do |partial_content|
+  file = File.join(ENV['BUSSER_ROOT'], %w{bin busser.bat})
+  check_file_content(file, Regexp.new(Regexp.escape(partial_content)), true)
 end
 
 Then(/^the file "(.*?)" should have permissions "(.*?)"$/) do |file, perms|
   in_current_dir do
     file_perms = sprintf("%o", File.stat(file).mode)
     file_perms = file_perms[2, 4]
-    file_perms.should eq(perms)
+    expect(file_perms).to eq(perms)
   end
 end
 
