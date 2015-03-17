@@ -56,14 +56,7 @@ module Busser
             # The application 'busser' is installed as part of a gem, and
             # this file is here to facilitate running it.
             #
-            if [ -n "$DEBUG" ] ; then set -x ; fi
-
-            # Get the directory where this ruby is. This will also resolve
-            # any symlinks in the directory/script, so it will be the fully
-            # resolved path.
-            SOURCE="#{ruby_bin}"
-            while [ -h "$SOURCE" ] ; do SOURCE="`readlink "$SOURCE"`"; done
-            DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
+            if test -n "$DEBUG"; then set -x; fi
 
             # Set Busser Root path
             BUSSER_ROOT="#{root_path}"
@@ -71,17 +64,15 @@ module Busser
             export BUSSER_ROOT
 
             # Export gem paths so that we use the isolated gems.
-            GEM_HOME="#{gem_home}"
-            GEM_PATH="#{gem_path}"
-            GEM_CACHE="#{gem_home}/cache"
-
-            export GEM_HOME GEM_PATH GEM_CACHE
+            GEM_HOME="#{gem_home}"; export GEM_HOME
+            GEM_PATH="#{gem_path}"; export GEM_PATH
+            GEM_CACHE="#{gem_home}/cache"; export GEM_CACHE
 
             # Unset RUBYOPT, we don't want this bleeding into our runtime.
             unset RUBYOPT GEMRC
 
             # Call the actual Busser bin with our arguments
-            exec "${DIR}/ruby" "#{gem_bindir}/busser" "$@"
+            exec "#{ruby_bin}" "#{gem_bindir}/busser" "$@"
           BUSSER_BINSTUB
         end
         chmod(binstub, 0755, :verbose => false)
