@@ -37,6 +37,7 @@ module Busser
 
     register Busser::Command::Setup, "setup",
       "setup", "Creates a Busser home"
+    tasks["setup"].options = Busser::Command::Setup.class_options
 
     register Busser::Command::Plugin, "plugin",
       "plugin SUBCOMMAND", "Plugin subcommands"
