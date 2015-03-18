@@ -1,3 +1,19 @@
+## 0.7.0 / Unreleased
+
+### Bug fixes
+
+* Pull request [#20][], issue [#17][]: Better detection of failed forked subprocess in `#run_ruby_script!` & `#run!`. ([@fnichol][], [@tyler-ball][], [@tknerr][])
+
+### New features
+
+* Add optional `--type bat` flag to `busser setup` to support Windows platforms. ([@fnichol][])
+
+### Improvements
+
+* Simplify busser binstub for more conservative bourne shell support. ([@fnichol][])
+* Pull request [#15][]: Fix spelling in `busser test`. ([@obazoud][])
+
+
 ## 0.6.2 / 2014-03-23
 
 ### Bug fixes
@@ -107,7 +123,13 @@
 [#6]: https://github.com/test-kitchen/busser/issues/6
 [#7]: https://github.com/test-kitchen/busser/issues/7
 [#8]: https://github.com/test-kitchen/busser/issues/8
+[#15]: https://github.com/test-kitchen/busser/issues/15
+[#17]: https://github.com/test-kitchen/busser/issues/17
+[#20]: https://github.com/test-kitchen/busser/issues/20
 [@fnichol]: https://github.com/fnichol
 [@jtimberman]: https://github.com/jtimberman
 [@neuhalje]: https://github.com/neuhalje
+[@obazoud]: https://github.com/obazoud
 [@sawanoboly]: https://github.com/sawanoboly
+[@tknerr]: https://github.com/tknerr
+[@tyler-ball]: https://github.com/tyler-ball
