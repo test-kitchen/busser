@@ -40,36 +40,56 @@ module Busser
       say(">>>>>> #{msg}")
     end
 
-    def run!(cmd)
-      run(cmd, :capture => false, :verbose => false)
+    def fatal(msg)
+      error("!!!!!! #{msg}")
+    end
 
-      if status.success?
-        true
-      else
-        code = status.exitstatus
-        die "Command [#{cmd}] exit code was #{code}", code
+    def run!(cmd, config = {})
+      config = { :capture => false, :verbose => false }.merge(config)
+
+      handle_command("Command", cmd) do
+        run(cmd, config)
       end
     end
 
     def run_ruby_script!(cmd, config = {})
       config = { :capture => false, :verbose => false }.merge(config)
-      run_ruby_script(cmd, config)
 
-      if status.success?
-        true
-      else
-        code = status.exitstatus
-        die "Ruby Script [#{cmd}] exit code was #{code}", code
+      handle_command("Ruby Script", cmd) do
+        run_ruby_script(cmd, config)
       end
     end
 
     def die(msg, exitstatus = 1)
-      $stderr.puts(msg)
+      fatal(msg)
       exit(exitstatus)
     end
 
     def status
       $?
+    end
+
+    def handle_command(type, cmd)
+      begin
+        yield
+      rescue => e
+        fatal(
+          "#{type} [#{cmd}] raised an exception: #{e.message}\n" +
+          e.backtrace.join("\n"))
+        raise
+      end
+
+      if status.nil?
+        die(
+          "#{type} [#{cmd}] did not return a valid status. " \
+          "This instance could be starved for RAM or may have swap disabled."
+        )
+      elsif status.success?
+        true
+      else
+        code = status.exitstatus
+        die("#{type} [#{cmd}] exit code was #{code}", code)
+      end
     end
   end
 end

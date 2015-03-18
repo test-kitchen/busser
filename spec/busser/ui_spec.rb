@@ -14,6 +14,10 @@ class SneakyUI
      msg
   end
 
+  def error(msg)
+    $stderr.puts msg
+  end
+
   def run(cmd, opts)
     @run_args = [cmd, opts]
   end
@@ -33,7 +37,7 @@ class SneakyUI
 
   # these methods are technically private, so we'll avoid straight send
   # calls in the specs
-  %w{banner info warn die run! run_ruby_script!}.each do |meth|
+  %w{banner info warn fatal die run! run_ruby_script!}.each do |meth|
     define_method("invoke_#{meth}") { |*args| send(meth, *args) }
   end
 end
@@ -72,9 +76,13 @@ describe Busser::UI do
     ui.invoke_warn("grinder").must_equal ">>>>>> grinder"
   end
 
+  it "#fatal should display a formatted message on stderr" do
+    capture_stderr { ui.invoke_fatal("grinder") }.must_equal "!!!!!! grinder\n"
+  end
+
   describe "#die" do
     it "prints a message to stderr" do
-      capture_stderr { ui.invoke_die("noes") }.must_equal "noes\n"
+      capture_stderr { ui.invoke_die("noes") }.must_equal "!!!!!! noes\n"
     end
 
     it "calls exit with 1 by default" do
@@ -105,6 +113,14 @@ describe Busser::UI do
       ui.invoke_run!("great-stuff").must_equal true
     end
 
+    it "re-raises any exceptions from the underlying fork/exec" do
+      ui.stubs(:run).raises(Errno::ENOMEM)
+
+      capture_stderr {
+        proc { ui.invoke_run!("failwhale") }.must_raise Errno::ENOMEM
+      }.must_match /raised an exception/
+    end
+
     it "terminates the program if the command failed" do
       ui.status = FakeStatus.new(false)
       capture_stderr { ui.invoke_run!("failwhale") }
@@ -118,6 +134,14 @@ describe Busser::UI do
       capture_stderr do
         ui.invoke_run!("failwhale").must_equal 24
       end
+    end
+
+    it "terminates the program if status is nil" do
+      ui.status = nil
+      capture_stderr { ui.invoke_run!("failwhale") }.
+        must_match /did not return a valid status/
+
+      ui.died?.must_equal true
     end
   end
 
@@ -145,6 +169,14 @@ describe Busser::UI do
       ui.invoke_run_ruby_script!("thewin.rb").must_equal true
     end
 
+    it "re-raises any exceptions from the underlying fork/exec" do
+      ui.stubs(:run_ruby_script).raises(Errno::ENOMEM)
+
+      capture_stderr {
+        proc { ui.invoke_run_ruby_script!("nope.rb") }.must_raise Errno::ENOMEM
+      }.must_match /raised an exception/
+    end
+
     it "terminates the program if the script failed" do
       ui.status = FakeStatus.new(false)
       capture_stderr { ui.invoke_run_ruby_script!("nope.rb") }
@@ -158,6 +190,14 @@ describe Busser::UI do
       capture_stderr do
         ui.invoke_run_ruby_script!("nadda.rb").must_equal 97
       end
+    end
+
+    it "terminates the program if status is nil" do
+      ui.status = nil
+      capture_stderr { ui.invoke_run_ruby_script!("nope.rb") }.
+        must_match /did not return a valid status/
+
+      ui.died?.must_equal true
     end
   end
 
