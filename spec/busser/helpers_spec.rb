@@ -15,11 +15,11 @@ describe Busser::Helpers do
     describe "with a default root path" do
 
       it "returns a base path if no suite name is given" do
-        suite_path.to_s.must_equal "/opt/busser/suites"
+        suite_path.to_s.must_match %r{/opt/busser/suites$}
       end
 
       it "returns a suite path given a suite name" do
-        suite_path("fuzzy").to_s.must_equal "/opt/busser/suites/fuzzy"
+        suite_path("fuzzy").to_s.must_match %r{/opt/busser/suites/fuzzy$}
       end
     end
 
@@ -30,12 +30,12 @@ describe Busser::Helpers do
 
       it "returns a base path if no suite name is given" do
         ENV['BUSSER_ROOT'] = "/path/to/busser"
-        suite_path.to_s.must_equal "/path/to/busser/suites"
+        suite_path.to_s.must_match %r{/path/to/busser/suites$}
       end
 
       it "returns a suite path given a suite name" do
         ENV['BUSSER_ROOT'] = "/path/to/busser"
-        suite_path("fuzzy").to_s.must_equal "/path/to/busser/suites/fuzzy"
+        suite_path("fuzzy").to_s.must_match %r{/path/to/busser/suites/fuzzy$}
       end
     end
   end
@@ -49,11 +49,11 @@ describe Busser::Helpers do
     describe "with a default root path" do
 
       it "returns a base path if no product name is given" do
-        vendor_path.to_s.must_equal "/opt/busser/vendor"
+        vendor_path.to_s.must_match %r{/opt/busser/vendor$}
       end
 
       it "returns a vendor path given a product name" do
-        vendor_path("supreme").to_s.must_equal "/opt/busser/vendor/supreme"
+        vendor_path("supreme").to_s.must_match %r{/opt/busser/vendor/supreme$}
       end
     end
 
@@ -64,12 +64,13 @@ describe Busser::Helpers do
 
       it "returns a base path if no product name is given" do
         ENV['BUSSER_ROOT'] = "/path/to/busser"
-        vendor_path.to_s.must_equal "/path/to/busser/vendor"
+        vendor_path.to_s.must_match %r{/path/to/busser/vendor$}
       end
 
       it "returns a suite path given a product name" do
         ENV['BUSSER_ROOT'] = "/path/to/busser"
-        vendor_path("maximal").to_s.must_equal "/path/to/busser/vendor/maximal"
+        vendor_path("maximal").to_s.must_match \
+          %r{/path/to/busser/vendor/maximal$}
       end
     end
   end
