@@ -33,13 +33,13 @@ module Busser
     def suite_path(name = nil)
       path = root_path + "suites"
       path += name if name
-      path
+      path.expand_path
     end
 
     def vendor_path(product = nil)
       path = root_path + "vendor"
       path += product if product
-      path
+      path.expand_path
     end
 
     def root_path
