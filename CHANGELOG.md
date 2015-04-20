@@ -1,3 +1,9 @@
+## 0.7.1 / 2015-04-20
+
+### Bug fixes
+
+* Pull request [#23][]: Dir.glob does not accept `/` but on windows hosts uses `/` when joining path segments - expanding the path corrects this. ([@tyler-ball][])
+
 ## 0.7.0 / 2015-03-19
 
 ### Bug fixes
@@ -126,6 +132,7 @@
 [#15]: https://github.com/test-kitchen/busser/issues/15
 [#17]: https://github.com/test-kitchen/busser/issues/17
 [#20]: https://github.com/test-kitchen/busser/issues/20
+[#23]: https://github.com/test-kitchen/busser/issues/23
 [@fnichol]: https://github.com/fnichol
 [@jtimberman]: https://github.com/jtimberman
 [@neuhalje]: https://github.com/neuhalje
