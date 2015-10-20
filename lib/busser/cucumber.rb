@@ -111,7 +111,7 @@ Then(/^a bat busser binstub file should contain:$/) do |partial_content|
 end
 
 Then(/^the file "(.*?)" should have permissions "(.*?)"$/) do |file, perms|
-  in_current_dir do
+  in_current_directory do
     file_perms = sprintf("%o", File.stat(file).mode)
     file_perms = file_perms[2, 4]
     expect(file_perms).to eq(perms)
