@@ -29,56 +29,38 @@ module Busser
     module_function
 
     def gem_installed?(name, version)
-      installed = Array(Gem::Specification.find_all_by_name(name, version))
-      version = latest_gem_version(name) if version.nil?
-
-      if version.nil?
-        ! installed.empty?
-      else
-        installed.find { |spec| spec.version.to_s == version }
-      end
+      version = Gem::Requirement.default unless version
+      ! Gem::Dependency.new(name, version).matching_specs.empty?
     end
 
     def install_gem(gem, version)
-      install_arg = gem =~ /\.gem$/ ? gem : new_dep(gem, version)
-      spec = dep_installer.install(install_arg).find { |s| s.name == gem }
+      version = Gem::Requirement.default unless version
+
+      inst = Gem::DependencyInstaller.new(rbg_options)
+      specs = inst.install(gem, Gem::Requirement.create(version))
+
       Gem.clear_paths
-      spec
+      specs.find { |s| s.name == gem }
     end
 
-    def latest_gem_version(name)
-      available_gems = dep_installer.find_gems_with_sources(new_dep(name))
-
-      spec, source = if available_gems.respond_to?(:last)
-        # DependencyInstaller sorts the results such that the last one is
-        # always the one it considers best.
-        spec_with_source = available_gems.last
-        spec_with_source && spec_with_source
-      else
-        # Rubygems 2.0 returns a Gem::Available set, which is a
-        # collection of AvailableSet::Tuple structs
-        available_gems.pick_best!
-        best_gem = available_gems.set.first
-        best_gem && [best_gem.spec, best_gem.source]
-      end
-
-      spec && spec.version && spec.version.to_s
+    def rbg_options
+      @rbg_options ||= Gem::DependencyInstaller::DEFAULT_OPTIONS.merge(
+        :suggest_alternate => false,
+        :version => Gem::Requirement.default,
+        :without_groups => [],
+        :minimal_deps => true,
+        :http_proxy => ENV.fetch("http_proxy", ENV.fetch("HTTP_PROXY", nil))
+      )
     end
 
     def silence_gem_ui
       interaction = Gem::DefaultUserInteraction.ui
-      Gem::DefaultUserInteraction.ui = Gem::SilentUI.new
+      if !Gem.configuration.really_verbose
+        Gem::DefaultUserInteraction.ui = Gem::SilentUI.new
+      end
       yield
     ensure
       Gem::DefaultUserInteraction.ui = interaction
-    end
-
-    def dep_installer
-      Gem::DependencyInstaller.new
-    end
-
-    def new_dep(name, version = nil)
-      Gem::Dependency.new(name, version)
     end
   end
 end

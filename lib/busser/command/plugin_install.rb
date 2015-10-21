@@ -38,7 +38,15 @@ module Busser
       class_option :force_postinstall, :type => :boolean, :default => false,
         :desc => "Run the plugin's postinstall if it is already installed"
 
+      class_option :verbose, :type => :boolean, :default => false,
+        :desc => "Set a more verbose output"
+
       def install_all
+        if options[:verbose]
+          Gem.configuration.verbose = 2 if options[:verbose]
+          info("Using http_proxy=#{rbg_options[:http_proxy].inspect}")
+        end
+
         silence_gem_ui do
           plugins.each { |plugin| install(plugin) }
         end
