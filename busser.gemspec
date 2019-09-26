@@ -22,7 +22,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'thor', '<= 0.19.0'
 
-  spec.add_development_dependency 'aruba', "0.7.4"
+  spec.add_development_dependency 'aruba', "0.14.12"
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency 'cane'
   spec.add_development_dependency 'countloc'
