@@ -1,8 +1,8 @@
 # Busser
 
-[![Gem Version](https://badge.fury.io/rb/busser.png)](http://badge.fury.io/rb/busser)
-[![Build Status](https://travis-ci.org/test-kitchen/busser.png?branch=master)](https://travis-ci.org/test-kitchen/busser)
-[![Code Climate](https://codeclimate.com/github/test-kitchen/busser.png)](https://codeclimate.com/github/test-kitchen/busser)
+[![Gem Version](https://badge.fury.io/rb/busser.svg)](http://badge.fury.io/rb/busser)
+[![Build Status](https://travis-ci.org/test-kitchen/busser.svg?branch=master)](https://travis-ci.org/test-kitchen/busser)
+[![Code Climate](https://codeclimate.com/github/test-kitchen/busser.svg)](https://codeclimate.com/github/test-kitchen/busser)
 
 Busser is a test setup and execution framework designed to
 work on remote nodes whose system dependencies cannot be relied upon, except
