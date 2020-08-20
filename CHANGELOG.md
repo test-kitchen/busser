@@ -1,3 +1,12 @@
+## 0.8.0 / 2020-08-20
+
+- Add http_proxy support to `busser plugin install`
+- Use a SPDX compliant license string in the gemspec
+- Remove the pin to bundler 1.x in the development gems
+- Misc readme updates
+- Add testing with Appveyor
+- Pin the Aruba dev dep to prevent API churn
+
 ## 0.7.1 / 2015-04-20
 
 ### Bug fixes
