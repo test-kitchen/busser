@@ -2,7 +2,7 @@
 # -*- encoding: utf-8 -*-
 
 $:.unshift File.join(File.dirname(__FILE__), %w{.. lib})
-require 'rubygems'
+require 'rubygems' unless defined?(Gem)
 require 'busser/cli'
 
 Busser::CLI.start

@@ -16,7 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'openssl'
+require 'openssl' unless defined?(OpenSSL)
 
 require 'busser/rubygems'
 require 'busser/thor'
