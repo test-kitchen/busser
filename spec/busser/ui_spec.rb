@@ -77,12 +77,14 @@ describe Busser::UI do
   end
 
   it "#fatal should display a formatted message on stderr" do
-    _(capture_stderr { ui.invoke_fatal("grinder") }).must_equal "!!!!!! grinder\n"
+    _(capture_stderr { ui.invoke_fatal("grinder") })
+      .must_equal "!!!!!! grinder\n"
   end
 
   describe "#die" do
     it "prints a message to stderr" do
-      _(capture_stderr { ui.invoke_die("noes") }).must_equal "!!!!!! noes\n"
+      _(capture_stderr { ui.invoke_die("noes") })
+        .must_equal "!!!!!! noes\n"
     end
 
     it "calls exit with 1 by default" do
