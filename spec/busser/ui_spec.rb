@@ -118,7 +118,7 @@ describe Busser::UI do
 
       _(capture_stderr {
         _ { ui.invoke_run!("failwhale") }.must_raise Errno::ENOMEM
-      }).must_match /raised an exception/
+      }).must_match %r{raised an exception}
     end
 
     it "terminates the program if the command failed" do
@@ -139,7 +139,7 @@ describe Busser::UI do
     it "terminates the program if status is nil" do
       ui.status = nil
       _(capture_stderr { ui.invoke_run!("failwhale") }).
-        must_match /did not return a valid status/
+        must_match %r{did not return a valid status}
 
       _(ui.died?).must_equal true
     end
@@ -174,7 +174,7 @@ describe Busser::UI do
 
       _(capture_stderr {
         _ { ui.invoke_run_ruby_script!("nope.rb") }.must_raise Errno::ENOMEM
-      }).must_match /raised an exception/
+      }).must_match %r{raised an exception}
     end
 
     it "terminates the program if the script failed" do
@@ -196,7 +196,7 @@ describe Busser::UI do
       ui.status = nil
 
       _(capture_stderr { ui.invoke_run_ruby_script!("nope.rb") }).
-        must_match /did not return a valid status/
+        must_match %r{did not return a valid status}
 
       _(ui.died?).must_equal true
     end
