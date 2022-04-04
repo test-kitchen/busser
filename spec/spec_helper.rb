@@ -18,7 +18,7 @@
 
 require 'fakefs/safe'
 require 'minitest/autorun'
-require 'mocha/setup'
+require 'mocha/minitest'
 
 if ENV["COVERAGE"]
   require 'simplecov'

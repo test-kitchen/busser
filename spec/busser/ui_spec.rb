@@ -65,35 +65,37 @@ describe Busser::UI do
   end
 
   it "#banner should display a formatted message" do
-    ui.invoke_banner("coffee").must_equal "-----> coffee"
+    _(ui.invoke_banner("coffee")).must_equal "-----> coffee"
   end
 
   it "#info should display a formatted message" do
-    ui.invoke_info("beans").must_equal "       beans"
+    _(ui.invoke_info("beans")).must_equal "       beans"
   end
 
   it "#warn should display a formatted message" do
-    ui.invoke_warn("grinder").must_equal ">>>>>> grinder"
+    _(ui.invoke_warn("grinder")).must_equal ">>>>>> grinder"
   end
 
   it "#fatal should display a formatted message on stderr" do
-    capture_stderr { ui.invoke_fatal("grinder") }.must_equal "!!!!!! grinder\n"
+    _(capture_stderr { ui.invoke_fatal("grinder") })
+      .must_equal "!!!!!! grinder\n"
   end
 
   describe "#die" do
     it "prints a message to stderr" do
-      capture_stderr { ui.invoke_die("noes") }.must_equal "!!!!!! noes\n"
+      _(capture_stderr { ui.invoke_die("noes") })
+        .must_equal "!!!!!! noes\n"
     end
 
     it "calls exit with 1 by default" do
       capture_stderr do
-        ui.invoke_die("fail").must_equal 1
+        _(ui.invoke_die("fail")).must_equal 1
       end
     end
 
     it "exits with a custom exit status" do
       capture_stderr do
-        ui.invoke_die("fail", 16).must_equal 16
+        _(ui.invoke_die("fail", 16)).must_equal 16
       end
     end
   end
@@ -103,45 +105,45 @@ describe Busser::UI do
     it "calls #run with correct options" do
       ui.invoke_run!("doitpls")
 
-      ui.run_args.must_equal([
+      _(ui.run_args).must_equal([
         "doitpls",
         { :capture => false, :verbose => false}
       ])
     end
 
     it "returns true if command succeeded" do
-      ui.invoke_run!("great-stuff").must_equal true
+      _(ui.invoke_run!("great-stuff")).must_equal true
     end
 
     it "re-raises any exceptions from the underlying fork/exec" do
       ui.stubs(:run).raises(Errno::ENOMEM)
 
-      capture_stderr {
-        proc { ui.invoke_run!("failwhale") }.must_raise Errno::ENOMEM
-      }.must_match /raised an exception/
+      _(capture_stderr {
+        _ { ui.invoke_run!("failwhale") }.must_raise Errno::ENOMEM
+      }).must_match %r{raised an exception}
     end
 
     it "terminates the program if the command failed" do
       ui.status = FakeStatus.new(false)
       capture_stderr { ui.invoke_run!("failwhale") }
 
-      ui.died?.must_equal true
+      _(ui.died?).must_equal true
     end
 
     it "terminates with the exit code of the failed command" do
       ui.status = FakeStatus.new(false, 24)
 
       capture_stderr do
-        ui.invoke_run!("failwhale").must_equal 24
+        _(ui.invoke_run!("failwhale")).must_equal 24
       end
     end
 
     it "terminates the program if status is nil" do
       ui.status = nil
-      capture_stderr { ui.invoke_run!("failwhale") }.
-        must_match /did not return a valid status/
+      _(capture_stderr { ui.invoke_run!("failwhale") }).
+        must_match %r{did not return a valid status}
 
-      ui.died?.must_equal true
+      _(ui.died?).must_equal true
     end
   end
 
@@ -150,7 +152,7 @@ describe Busser::UI do
     it "calls #run_ruby_script with correct default options" do
       ui.invoke_run_ruby_script!("theworks.rb")
 
-      ui.run_ruby_script_args.must_equal([
+      _(ui.run_ruby_script_args).must_equal([
         "theworks.rb",
         { :capture => false, :verbose => false }
       ])
@@ -159,45 +161,46 @@ describe Busser::UI do
     it "calls #run_ruby_script with correct default options" do
       ui.invoke_run_ruby_script!("theworks.rb", :verbose => true)
 
-      ui.run_ruby_script_args.must_equal([
+      _(ui.run_ruby_script_args).must_equal([
         "theworks.rb",
         { :capture => false, :verbose => true }
       ])
     end
 
     it "returns true if command succeeded" do
-      ui.invoke_run_ruby_script!("thewin.rb").must_equal true
+      _(ui.invoke_run_ruby_script!("thewin.rb")).must_equal true
     end
 
     it "re-raises any exceptions from the underlying fork/exec" do
       ui.stubs(:run_ruby_script).raises(Errno::ENOMEM)
 
-      capture_stderr {
-        proc { ui.invoke_run_ruby_script!("nope.rb") }.must_raise Errno::ENOMEM
-      }.must_match /raised an exception/
+      _(capture_stderr {
+        _ { ui.invoke_run_ruby_script!("nope.rb") }.must_raise Errno::ENOMEM
+      }).must_match %r{raised an exception}
     end
 
     it "terminates the program if the script failed" do
       ui.status = FakeStatus.new(false)
       capture_stderr { ui.invoke_run_ruby_script!("nope.rb") }
 
-      ui.died?.must_equal true
+      _(ui.died?).must_equal true
     end
 
     it "terminates with the exit code of the failed script" do
       ui.status = FakeStatus.new(false, 97)
 
       capture_stderr do
-        ui.invoke_run_ruby_script!("nadda.rb").must_equal 97
+        _(ui.invoke_run_ruby_script!("nadda.rb")).must_equal 97
       end
     end
 
     it "terminates the program if status is nil" do
       ui.status = nil
-      capture_stderr { ui.invoke_run_ruby_script!("nope.rb") }.
-        must_match /did not return a valid status/
 
-      ui.died?.must_equal true
+      _(capture_stderr { ui.invoke_run_ruby_script!("nope.rb") }).
+        must_match %r{did not return a valid status}
+
+      _(ui.died?).must_equal true
     end
   end
 
