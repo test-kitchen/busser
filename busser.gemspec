@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = ">= 1.9.1"
 
-  spec.add_dependency 'thor', '<= 0.19.0'
+  spec.add_dependency 'thor', '<= 1.1.0'
 
   spec.add_development_dependency 'aruba', "0.7.4"
   spec.add_development_dependency "bundler"
