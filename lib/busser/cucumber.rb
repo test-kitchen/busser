@@ -6,8 +6,8 @@ end
 
 require 'busser/cucumber/hooks'
 
-require 'tmpdir'
-require 'pathname'
+require 'tmpdir' unless defined?(Dir.mktmpdir)
+require 'pathname' unless defined?(Pathname)
 
 Given(/^a BUSSER_ROOT of "(.*?)"$/) do |busser_root|
   backup_envvar('BUSSER_ROOT')

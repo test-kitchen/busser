@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.description   = %q{Busser - Runs tests for projects in Test Kitchen}
   spec.summary       = spec.description
   spec.homepage      = "https://github.com/test-kitchen/busser"
-  spec.license       = 'Apache 2.0'
+  spec.license       = 'Apache-2.0'
 
   spec.files         = `git ls-files`.split($/)
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
