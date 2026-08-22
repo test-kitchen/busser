@@ -42,7 +42,7 @@ class SneakyUI
   end
 end
 
-# Stub that mimicks a Process::Status object
+# Stub that mimics a Process::Status object
 class FakeStatus
 
   attr_reader :exitstatus

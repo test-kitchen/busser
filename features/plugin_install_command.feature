@@ -20,7 +20,7 @@ Feature: Plugin install command
     And the exit status should be 0
     And a gem named "busser-bash" is installed with version "0.1.0"
 
-  Scenario: Installing a specfic newer version of an existing plugin
+  Scenario: Installing a specific newer version of an existing plugin
     When I successfully run `busser plugin install busser-bash@0.1.0`
     And I run `busser plugin install busser-bash@0.1.1`
     Then the output should contain "Plugin bash installed (version 0.1.1)"

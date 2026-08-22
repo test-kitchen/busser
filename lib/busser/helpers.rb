@@ -48,7 +48,7 @@ module Busser
 
     def chef_apply(config = {}, &block)
       warn "Apologies, but Busser no longer supports the chef_apply helper," +
-        " so the contents of this block will not be exectued. Please refactor" +
+        " so the contents of this block will not be executed. Please refactor" +
         " your code to use Thor actions, shell out commands or another" +
         " strategy"
     end
