@@ -1,7 +1,6 @@
 # Busser
 
 [![Gem Version](https://badge.fury.io/rb/busser.svg)](http://badge.fury.io/rb/busser)
-[![Build Status](https://travis-ci.org/test-kitchen/busser.svg?branch=master)](https://travis-ci.org/test-kitchen/busser)
 [![Code Climate](https://codeclimate.com/github/test-kitchen/busser.svg)](https://codeclimate.com/github/test-kitchen/busser)
 
 Busser is a test setup and execution framework designed to
@@ -21,11 +20,11 @@ Add this line to your application's Gemfile:
 
 And then execute:
 
-    $ bundle
+    bundle
 
 Or install it yourself as:
 
-    $ gem install busser
+    gem install busser
 
 ## Usage
 
