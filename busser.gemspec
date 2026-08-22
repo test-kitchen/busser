@@ -21,6 +21,8 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = ">= 3.1"
 
   spec.add_dependency 'thor', '<= 1.1.0'
+  # base64 is no longer a default gem; deserialize needs it at runtime
+  spec.add_dependency 'base64'
 
   spec.add_development_dependency 'aruba', "0.7.4"
   spec.add_development_dependency 'fakefs'
