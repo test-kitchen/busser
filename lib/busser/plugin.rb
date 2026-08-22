@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 #
 # Author:: Fletcher Nichol (<fnichol@nichol.ca>)
 #
@@ -42,8 +41,8 @@ module Busser
     end
 
     def all_runner_plugins
-      Gem.find_files('busser/runner_plugin/*.rb').map do |file|
-        "busser/runner_plugin/#{File.basename(file).sub(/\.rb$/, '')}"
+      Gem.find_files("busser/runner_plugin/*.rb").map do |file|
+        "busser/runner_plugin/#{File.basename(file).sub(/\.rb$/, "")}"
       end
     end
 
@@ -60,7 +59,8 @@ module Busser
     def gem_from_path(plugin_path)
       local_gem_path = "#{File.expand_path(plugin_path, $LOAD_PATH.first)}"
       local_gemspec = File.join(
-        File.dirname($LOAD_PATH.first), "busser.gemspec")
+        File.dirname($LOAD_PATH.first), "busser.gemspec"
+      )
 
       if ! Dir.glob("#{local_gem_path}#{Gem.suffix_pattern}").empty?
         Gem::Specification.load(File.expand_path(local_gemspec))

@@ -1,7 +1,6 @@
 require "bundler/gem_tasks"
 require 'rake/testtask'
 require 'cucumber/rake/task'
-require 'cane/rake_task'
 
 Rake::TestTask.new(:unit) do |t|
   t.libs.push "lib"
@@ -16,10 +15,6 @@ end
 desc "Run all test suites"
 task :test => [:unit, :features]
 
-desc "Run cane to check quality metrics"
-Cane::RakeTask.new do |cane|
-  cane.canefile = './.cane'
-end
 
 desc "Display LOC stats"
 task :stats do
@@ -30,6 +25,6 @@ task :stats do
 end
 
 desc "Run all quality tasks"
-task :quality => [:cane, :stats]
+task :quality => [:stats]
 
 task :default => [:test, :quality]

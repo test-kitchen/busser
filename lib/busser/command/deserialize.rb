@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 #
 # Author:: Fletcher Nichol (<fnichol@nichol.ca>)
 #
@@ -16,10 +15,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'base64' unless defined?(Base64)
-require 'digest' unless defined?(Digest)
+require "base64" unless defined?(Base64)
+require "digest" unless defined?(Digest)
 
-require 'busser/thor'
+require "busser/thor"
 
 module Busser
 
@@ -31,11 +30,11 @@ module Busser
     #
     class Deserialize < Busser::Thor::BaseGroup
 
-      class_option :destination, :desc => "Destination file path"
+      class_option :destination, desc: "Destination file path"
 
-      class_option :md5sum, :desc => "MD5 digest of original file"
+      class_option :md5sum, desc: "MD5 digest of original file"
 
-      class_option :perms, :desc => "Unix permissions on destination file"
+      class_option :perms, desc: "Unix permissions on destination file"
 
       def perform
         file = File.expand_path(options[:destination])

@@ -7,3 +7,7 @@ group :guard do
   gem 'guard-cucumber'
   gem 'guard-cane'
 end
+
+group :cookstyle do
+  gem "cookstyle"
+end

@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 #
 # Author:: Fletcher Nichol (<fnichol@nichol.ca>)
 #
@@ -16,8 +15,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'busser'
-require 'busser/thor'
+require "busser"
+require "busser/thor"
 
 module Busser
 
@@ -29,13 +28,13 @@ module Busser
     #
     class PluginCreate < Busser::Thor::BaseGroup
 
-      argument :name, :type => :string
+      argument :name, type: :string
 
-      class_option :type, :aliases => "-t", :type => :string,
-        :default => 'runner', :desc => "Type of plugin (runner)"
+      class_option :type, aliases: "-t", type: :string,
+        default: "runner", desc: "Type of plugin (runner)"
 
-      class_option :license, :aliases => "-l", :default => "apachev2",
-        :desc => "License type for gem (apachev2, mit, lgplv3, reserved)"
+      class_option :license, aliases: "-l", default: "apachev2",
+        desc: "License type for gem (apachev2, mit, lgplv3, reserved)"
 
       def create
         self.class.source_root(Busser.source_root.join("templates", "plugin"))
@@ -118,29 +117,29 @@ module Busser
           type_klass_name = "#{::Thor::Util.camel_case(options[:type])}Plugin"
 
           {
-            :name => name,
-            :gem_name => "busser-#{name}",
-            :gemspec => "busser-#{name}.gemspec",
-            :klass_name => ::Thor::Util.camel_case(name),
-            :type => options[:type],
-            :type_klass_name => type_klass_name,
-            :constant_name => ::Thor::Util.snake_case(name).upcase,
-            :author => author,
-            :email => email,
-            :license => options[:license],
-            :license_string => license_string,
-            :year => Time.now.year,
+            name: name,
+            gem_name: "busser-#{name}",
+            gemspec: "busser-#{name}.gemspec",
+            klass_name: ::Thor::Util.camel_case(name),
+            type: options[:type],
+            type_klass_name: type_klass_name,
+            constant_name: ::Thor::Util.snake_case(name).upcase,
+            author: author,
+            email: email,
+            license: options[:license],
+            license_string: license_string,
+            year: Time.now.year,
           }
         end
       end
 
       def author
-        git_user_name = %x{git config user.name}.chomp
+        git_user_name = `git config user.name`.chomp
         git_user_name.empty? ? "TODO: Write your name" : git_user_name
       end
 
       def email
-        git_user_email = %x{git config user.email}.chomp
+        git_user_email = `git config user.email`.chomp
         git_user_email.empty? ? "TODO: Write your email" : git_user_email
       end
 
@@ -166,8 +165,8 @@ module Busser
       end
 
       def license_comment
-        @license_comment ||= IO.read(File.join(target_dir, license_filename)).
-          gsub(/^/, '# ').gsub(/\s+$/, '')
+        @license_comment ||= IO.read(File.join(target_dir, license_filename))
+          .gsub(/^/, "# ").gsub(/\s+$/, "")
       end
     end
   end

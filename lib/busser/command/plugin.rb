@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 #
 # Author:: Fletcher Nichol (<fnichol@nichol.ca>)
 #
@@ -16,10 +15,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'busser/thor'
-require 'busser/command/plugin_create'
-require 'busser/command/plugin_install'
-require 'busser/command/plugin_list'
+require "busser/thor"
+require "busser/command/plugin_create"
+require "busser/command/plugin_install"
+require "busser/command/plugin_list"
 
 module Busser
 

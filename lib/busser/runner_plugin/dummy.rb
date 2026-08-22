@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 #
 # Author:: Fletcher Nichol (<fnichol@nichol.ca>)
 #
@@ -16,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'busser/runner_plugin'
+require "busser/runner_plugin"
 
 # Dummy runner plugin for Busser.
 #
@@ -37,7 +36,7 @@ class Busser::RunnerPlugin::Dummy < Busser::RunnerPlugin::Base
 
   def test
     banner "[dummy] Running"
-    if File.exists?(File.join(suite_path("dummy"), "foobar.txt"))
+    if File.exist?(File.join(suite_path("dummy"), "foobar.txt"))
       info "[dummy] The postinstall script has been called"
     else
       warn "[dummy] The postinstall script was not called"

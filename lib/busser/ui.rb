@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 #
 # Author:: Fletcher Nichol (<fnichol@nichol.ca>)
 #
@@ -16,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'thor/shell'
+require "thor/shell"
 
 module Busser
 
@@ -45,7 +44,7 @@ module Busser
     end
 
     def run!(cmd, config = {})
-      config = { :capture => false, :verbose => false }.merge(config)
+      config = { capture: false, verbose: false }.merge(config)
 
       handle_command("Command", cmd) do
         run(cmd, config)
@@ -53,7 +52,7 @@ module Busser
     end
 
     def run_ruby_script!(cmd, config = {})
-      config = { :capture => false, :verbose => false }.merge(config)
+      config = { capture: false, verbose: false }.merge(config)
 
       handle_command("Ruby Script", cmd) do
         run_ruby_script(cmd, config)
@@ -75,7 +74,8 @@ module Busser
       rescue => e
         fatal(
           "#{type} [#{cmd}] raised an exception: #{e.message}\n" +
-          e.backtrace.join("\n"))
+          e.backtrace.join("\n")
+        )
         raise
       end
 

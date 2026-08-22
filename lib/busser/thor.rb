@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 #
 # Author:: Fletcher Nichol (<fnichol@nichol.ca>)
 #
@@ -16,10 +15,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'thor' unless defined?(Thor)
+require "thor" unless defined?(Thor)
 
-require 'busser/helpers'
-require 'busser/ui'
+require "busser/helpers"
+require "busser/ui"
 
 module Busser
 

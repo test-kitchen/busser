@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 #
 # Author:: Fletcher Nichol (<fnichol@nichol.ca>)
 #
@@ -16,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'rubygems/dependency_installer'
+require "rubygems/dependency_installer"
 
 module Busser
 
@@ -45,17 +44,17 @@ module Busser
 
     def rbg_options
       @rbg_options ||= Gem::DependencyInstaller::DEFAULT_OPTIONS.merge(
-        :suggest_alternate => false,
-        :version => Gem::Requirement.default,
-        :without_groups => [],
-        :minimal_deps => true,
-        :http_proxy => ENV.fetch("http_proxy", ENV.fetch("HTTP_PROXY", nil))
+        suggest_alternate: false,
+        version: Gem::Requirement.default,
+        without_groups: [],
+        minimal_deps: true,
+        http_proxy: ENV.fetch("http_proxy", ENV.fetch("HTTP_PROXY", nil))
       )
     end
 
     def silence_gem_ui
       interaction = Gem::DefaultUserInteraction.ui
-      if !Gem.configuration.really_verbose
+      unless Gem.configuration.really_verbose
         Gem::DefaultUserInteraction.ui = Gem::SilentUI.new
       end
       yield
