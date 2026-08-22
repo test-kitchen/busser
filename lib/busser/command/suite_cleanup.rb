@@ -15,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "fileutils" unless defined?(FileUtils)  # Pathname#rmtree needs it
+require "fileutils" unless defined?(FileUtils) # Pathname#rmtree needs it
 require "busser/thor"
 
 module Busser

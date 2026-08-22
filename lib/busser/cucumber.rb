@@ -120,7 +120,6 @@ Then(/^a bat busser binstub file should contain:$/) do |partial_content|
   expect(File.read(file)).to include(partial_content)
 end
 
-
 Then(/^pry me$/) do
   require "pry"; binding.pry # rubocop:disable Lint/Debugger
 end
