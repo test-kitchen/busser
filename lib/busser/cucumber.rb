@@ -61,6 +61,19 @@ Given(/^a non bundler environment$/) do
     ENV.delete(key)
     delete_environment_variable(key)
   end
+
+  # BUNDLE_PATH makes RubyGems install into the bundle rather than GEM_HOME,
+  # so drop it -- but keep the bundle's gems reachable through GEM_PATH.
+  if ENV["BUNDLE_PATH"]
+    bundled = Dir.glob(File.join(ENV["BUNDLE_PATH"], "ruby", "*")).first
+    backup_envvar("BUNDLE_PATH")
+    ENV.delete("BUNDLE_PATH")
+    delete_environment_variable("BUNDLE_PATH")
+    if bundled
+      ENV["GEM_PATH"] = [ENV["GEM_PATH"], bundled].compact.reject(&:empty?).join(":")
+      set_environment_variable("GEM_PATH", ENV["GEM_PATH"])
+    end
+  end
 end
 
 Then(/^the suite directory named "(.*?)" should exist$/) do |name|

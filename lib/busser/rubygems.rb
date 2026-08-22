@@ -55,6 +55,9 @@ module Busser
         version: Gem::Requirement.default,
         without_groups: [],
         minimal_deps: true,
+        # Install into GEM_HOME explicitly. Under bundler Gem.dir points at the
+        # bundle path, which is not where busser plugins belong.
+        install_dir: ENV.fetch("GEM_HOME", nil),
         http_proxy: ENV.fetch("http_proxy", ENV.fetch("HTTP_PROXY", nil))
       )
     end
