@@ -40,6 +40,7 @@ module Busser
       gem_home = ENV.fetch("GEM_HOME", nil)
       Gem.use_paths(gem_home, Gem.path) if gem_home && Gem.dir != gem_home
 
+      $stderr.puts("DBG gem_home=#{gem_home.inspect} Gem.dir=#{Gem.dir} Gem.path=#{Gem.path.inspect}")
       inst = Gem::DependencyInstaller.new(rbg_options)
       specs = inst.install(gem_name, Gem::Requirement.create(version))
 
