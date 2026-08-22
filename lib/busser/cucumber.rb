@@ -6,6 +6,7 @@ end
 
 require "busser/cucumber/hooks"
 
+require "fileutils" unless defined?(FileUtils)
 require "tmpdir" unless defined?(Dir.mktmpdir)
 require "pathname" unless defined?(Pathname)
 
@@ -33,8 +34,11 @@ Given(/^a suite directory named "(.*?)"$/) do |name|
 end
 
 Given(/^a file in suite "(.*?)" named "(.*?)" with:$/) do |suite, file, content|
+  # BUSSER_ROOT is outside aruba's working directory, and aruba 1.0+ refuses
+  # absolute paths in its file helpers, so write it directly.
   file_name = File.join(ENV["BUSSER_ROOT"], "suites", suite, file)
-  write_file(file_name, content)
+  FileUtils.mkdir_p(File.dirname(file_name))
+  File.write(file_name, content)
 end
 
 Given(/^a sandboxed GEM_HOME directory named "(.*?)"$/) do |name|
@@ -56,32 +60,32 @@ end
 
 Then(/^the suite directory named "(.*?)" should exist$/) do |name|
   directory = File.join(ENV["BUSSER_ROOT"], "suites", name)
-  check_directory_presence([directory], true)
+  expect(Dir).to exist(directory)
 end
 
 Then(/^the suite directory named "(.*?)" should not exist$/) do |name|
   directory = File.join(ENV["BUSSER_ROOT"], "suites", name)
-  check_directory_presence([directory], false)
+  expect(Dir).to_not exist(directory)
 end
 
 Then(/^the suite file "(.*?)" should contain exactly:$/) do |file, content|
   file_name = File.join(ENV["BUSSER_ROOT"], "suites", file)
-  check_file_content(file_name, content)
+  expect(File.read(file_name)).to eq(content)
 end
 
 Then(/^the vendor directory named "(.*?)" should exist$/) do |name|
   directory = File.join(ENV["BUSSER_ROOT"], "vendor", name)
-  check_directory_presence([directory], true)
+  expect(Dir).to exist(directory)
 end
 
 Then(/^the vendor directory named "(.*?)" should not exist$/) do |name|
   directory = File.join(ENV["BUSSER_ROOT"], "vendor", name)
-  check_directory_presence([directory], false)
+  expect(Dir).to_not exist(directory)
 end
 
 Then(/^the vendor file "(.*?)" should contain "(.*?)"$/) do |file, content|
   file_name = File.join(ENV["BUSSER_ROOT"], "vendor", file)
-  check_file_content(file_name, content, true)
+  expect(File.read(file_name)).to include(content)
 end
 
 Then(/^a gem named "(.*?)" is installed with version "(.*?)"$/) do |name, ver|
@@ -97,17 +101,17 @@ Then(/^a gem named "(.*?)" is installed$/) do |name|
 end
 
 Then(/^the BUSSER_ROOT directory should exist$/) do
-  check_directory_presence([ENV["BUSSER_ROOT"]], true)
+  expect(Dir).to exist(ENV["BUSSER_ROOT"])
 end
 
 Then(/^a busser binstub file should contain:$/) do |partial_content|
   file = File.join(ENV["BUSSER_ROOT"], %w{bin busser})
-  check_file_content(file, Regexp.new(Regexp.escape(partial_content)), true)
+  expect(File.read(file)).to include(partial_content)
 end
 
 Then(/^a bat busser binstub file should contain:$/) do |partial_content|
   file = File.join(ENV["BUSSER_ROOT"], %w{bin busser.bat})
-  check_file_content(file, Regexp.new(Regexp.escape(partial_content)), true)
+  expect(File.read(file)).to include(partial_content)
 end
 
 Then(/^the file "(.*?)" should have permissions "(.*?)"$/) do |file, perms|
