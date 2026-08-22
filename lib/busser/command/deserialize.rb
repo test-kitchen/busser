@@ -16,6 +16,8 @@
 # limitations under the License.
 
 require "base64" unless defined?(Base64)
+require "fileutils" unless defined?(FileUtils)
+require "digest/md5" unless defined?(Digest::MD5)
 require "digest" unless defined?(Digest)
 
 require "busser/thor"

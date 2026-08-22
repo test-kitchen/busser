@@ -20,7 +20,9 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = ">= 3.1"
 
-  spec.add_dependency 'thor', '<= 1.1.0'
+  # thor 1.1.0 references DidYouMean::SPELL_CHECKERS, removed in Ruby 3.1,
+  # so the CLI crashed on startup on every supported Ruby
+  spec.add_dependency 'thor', '>= 1.1'
   # base64 is no longer a default gem; deserialize needs it at runtime
   spec.add_dependency 'base64'
 

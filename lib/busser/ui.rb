@@ -27,6 +27,16 @@ module Busser
 
     module_function
 
+    # Thor::Shell's delegated methods are not mixed into this module, so
+    # provide the two output primitives it relies on.
+    def say(msg)
+      $stdout.puts(msg)
+    end
+
+    def error(msg)
+      $stderr.puts(msg)
+    end
+
     def banner(msg)
       say("-----> #{msg}")
     end

@@ -32,14 +32,21 @@ module Busser
       ! Gem::Dependency.new(name, version).matching_specs.empty?
     end
 
-    def install_gem(gem, version)
+    def install_gem(gem_name, version)
       version = Gem::Requirement.default unless version
 
       inst = Gem::DependencyInstaller.new(rbg_options)
-      specs = inst.install(gem, Gem::Requirement.create(version))
+      specs = inst.install(gem_name, Gem::Requirement.create(version))
 
       Gem.clear_paths
-      specs.find { |s| s.name == gem }
+      spec = specs.find { |s| s.name == gem_name }
+      # Modern RubyGems does not put a freshly installed gem on the load path.
+      # Add it directly rather than activating, so installing a second version
+      # in the same process does not raise a Gem::LoadError conflict.
+      spec&.full_require_paths&.each do |path|
+        $LOAD_PATH.unshift(path) unless $LOAD_PATH.include?(path)
+      end
+      spec
     end
 
     def rbg_options

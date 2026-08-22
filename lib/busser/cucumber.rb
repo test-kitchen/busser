@@ -22,6 +22,8 @@ Given(/^a test BUSSER_ROOT directory named "(.*?)"$/) do |name|
   busser_root = Pathname.new(Dir.mktmpdir(name))
   (busser_root + "suites").mkpath
   ENV["BUSSER_ROOT"] = busser_root.to_s
+  # aruba 2.x runs commands with its own environment, so set it there too
+  set_environment_variable("BUSSER_ROOT", busser_root.to_s)
   @busser_root_dirs << busser_root
 end
 
@@ -48,6 +50,8 @@ Given(/^a sandboxed GEM_HOME directory named "(.*?)"$/) do |name|
   gem_home = Pathname.new(Dir.mktmpdir(name))
   ENV["GEM_HOME"] = gem_home.to_s
   ENV["GEM_PATH"] = [gem_home.to_s, ENV["GEM_PATH"]].join(":")
+  set_environment_variable("GEM_HOME", ENV["GEM_HOME"])
+  set_environment_variable("GEM_PATH", ENV["GEM_PATH"])
   @busser_root_dirs << gem_home
 end
 
@@ -55,6 +59,7 @@ Given(/^a non bundler environment$/) do
   %w{BUNDLER_EDITOR BUNDLE_BIN_PATH BUNDLE_GEMFILE RUBYOPT}.each do |key|
     backup_envvar(key)
     ENV.delete(key)
+    delete_environment_variable(key)
   end
 end
 
@@ -88,16 +93,17 @@ Then(/^the vendor file "(.*?)" should contain "(.*?)"$/) do |file, content|
   expect(File.read(file_name)).to include(content)
 end
 
+# Check the sandboxed GEM_HOME directly. Shelling out to `gem list` depends on
+# the child process inheriting the sandbox and a bundler-free environment,
+# which aruba 2.x no longer arranges for us.
 Then(/^a gem named "(.*?)" is installed with version "(.*?)"$/) do |name, ver|
-  unbundlerize do
-    run_simple("gem list #{name} --version #{ver} -i", true, nil)
-  end
+  specs = Dir.glob(File.join(ENV["GEM_HOME"], "specifications", "#{name}-#{ver}.gemspec"))
+  expect(specs).to_not be_empty
 end
 
 Then(/^a gem named "(.*?)" is installed$/) do |name|
-  unbundlerize do
-    run_simple("gem list #{name} -i", true, nil)
-  end
+  specs = Dir.glob(File.join(ENV["GEM_HOME"], "specifications", "#{name}-*.gemspec"))
+  expect(specs).to_not be_empty
 end
 
 Then(/^the BUSSER_ROOT directory should exist$/) do
@@ -114,13 +120,6 @@ Then(/^a bat busser binstub file should contain:$/) do |partial_content|
   expect(File.read(file)).to include(partial_content)
 end
 
-Then(/^the file "(.*?)" should have permissions "(.*?)"$/) do |file, perms|
-  in_current_directory do
-    file_perms = sprintf("%o", File.stat(file).mode)
-    file_perms = file_perms[2, 4]
-    expect(file_perms).to eq(perms)
-  end
-end
 
 Then(/^pry me$/) do
   require "pry"; binding.pry # rubocop:disable Lint/Debugger

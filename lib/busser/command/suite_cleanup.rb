@@ -15,6 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+require "fileutils" unless defined?(FileUtils)  # Pathname#rmtree needs it
 require "busser/thor"
 
 module Busser
@@ -31,7 +32,7 @@ module Busser
         if suite_path.directory?
           Pathname.glob(suite_path + "*").each do |dir|
             info "Removing #{dir}"
-            dir.rmtree
+            FileUtils.rm_rf(dir)
           end
         else
           info "Suite path directory #{suite_path} does not exist, skipping."

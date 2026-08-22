@@ -25,7 +25,12 @@ end
 def unbundlerize
   keys = %w{BUNDLER_EDITOR BUNDLE_BIN_PATH BUNDLE_GEMFILE RUBYOPT}
 
-  keys.each { |key| backup_envvar(key); ENV.delete(key) }
+  keys.each do |key|
+    backup_envvar(key)
+    ENV.delete(key)
+    # aruba 2.x runs commands with its own environment, so clear it there too
+    delete_environment_variable(key) if respond_to?(:delete_environment_variable)
+  end
   yield
   keys.each { |key| restore_envvar(key) }
 end
