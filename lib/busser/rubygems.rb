@@ -35,6 +35,11 @@ module Busser
     def install_gem(gem_name, version)
       version = Gem::Requirement.default unless version
 
+      # A bundler-managed environment can leave Gem.dir pointing at the bundle,
+      # which is not where busser plugins belong. Point RubyGems at GEM_HOME.
+      gem_home = ENV.fetch("GEM_HOME", nil)
+      Gem.use_paths(gem_home, Gem.path) if gem_home && Gem.dir != gem_home
+
       inst = Gem::DependencyInstaller.new(rbg_options)
       specs = inst.install(gem_name, Gem::Requirement.create(version))
 
