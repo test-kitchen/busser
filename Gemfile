@@ -7,5 +7,6 @@ group :cookstyle do
 end
 
 group :test do
+  gem "cucumber", "~> 9.0"
   gem "rake"
 end
