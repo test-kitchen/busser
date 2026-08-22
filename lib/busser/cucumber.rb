@@ -52,13 +52,6 @@ Given(/^a sandboxed GEM_HOME directory named "(.*?)"$/) do |name|
   ENV["GEM_PATH"] = [gem_home.to_s, ENV["GEM_PATH"]].join(":")
   set_environment_variable("GEM_HOME", ENV["GEM_HOME"])
   set_environment_variable("GEM_PATH", ENV["GEM_PATH"])
-  # bundler exports GEM_HOME, and that value otherwise wins over aruba's
-  # per-scenario environment when the command is spawned
-  Aruba.configure do |config|
-    config.command_environment = config.command_environment.merge(
-      "GEM_HOME" => ENV["GEM_HOME"], "GEM_PATH" => ENV["GEM_PATH"]
-    )
-  end
   @busser_root_dirs << gem_home
 end
 
