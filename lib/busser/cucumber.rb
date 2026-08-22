@@ -86,13 +86,13 @@ end
 
 Then(/^a gem named "(.*?)" is installed with version "(.*?)"$/) do |name, ver|
   unbundlerize do
-    run_simple(unescape("gem list #{name} --version #{ver} -i"), true, nil)
+    run_simple("gem list #{name} --version #{ver} -i", true, nil)
   end
 end
 
 Then(/^a gem named "(.*?)" is installed$/) do |name|
   unbundlerize do
-    run_simple(unescape("gem list #{name} -i"), true, nil)
+    run_simple("gem list #{name} -i", true, nil)
   end
 end
 

@@ -15,15 +15,4 @@ end
 desc "Run all test suites"
 task :test => [:unit, :features]
 
-desc "Display LOC stats"
-task :stats do
-  puts "\n## Production Code Stats"
-  sh "countloc -r lib"
-  puts "\n## Test Code Stats"
-  sh "countloc -r spec features"
-end
-
-desc "Run all quality tasks"
-task :quality => [:stats]
-
-task :default => [:test, :quality]
+task :default => [:test]

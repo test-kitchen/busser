@@ -23,7 +23,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'thor', '<= 1.1.0'
 
   spec.add_development_dependency 'aruba', "0.7.4"
-  spec.add_development_dependency 'countloc'
   spec.add_development_dependency 'fakefs'
   spec.add_development_dependency 'minitest'
   spec.add_development_dependency 'mocha'
