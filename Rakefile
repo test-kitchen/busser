@@ -1,18 +1,18 @@
 require "bundler/gem_tasks"
-require 'rake/testtask'
-require 'cucumber/rake/task'
+require "rake/testtask"
+require "cucumber/rake/task"
 
 Rake::TestTask.new(:unit) do |t|
   t.libs.push "lib"
-  t.test_files = FileList['spec/**/*_spec.rb']
+  t.test_files = FileList["spec/**/*_spec.rb"]
   t.verbose = true
 end
 
 Cucumber::Rake::Task.new(:features) do |t|
-  t.cucumber_opts = ['features', '-x', '--format progress', '--no-color', '-b']
+  t.cucumber_opts = ["features", "-x", "--format progress", "--no-color", "-b"]
 end
 
 desc "Run all test suites"
-task :test => [:unit, :features]
+task test: %i{unit features}
 
-task :default => [:test]
+task default: [:test]
