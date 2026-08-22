@@ -116,7 +116,7 @@ end
 
 Then(/^a gem named "(.*?)" is installed$/) do |name|
   specs = Dir.glob(File.join(ENV["GEM_HOME"], "specifications", "#{name}-*.gemspec"))
-  expect(specs).to_not be_empty
+  expect(specs).to_not(be_empty, -> { "GEM_HOME=#{ENV["GEM_HOME"]} cmd_output=#{last_command_started.output}" })
 end
 
 Then(/^the BUSSER_ROOT directory should exist$/) do
