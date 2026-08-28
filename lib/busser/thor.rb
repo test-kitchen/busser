@@ -34,6 +34,17 @@ module Busser
       include Helpers
       include UI
       include ::Thor::Actions
+
+      # Thor exits 0 when a command fails unless this is true, and warns on
+      # every failure that it is not set. Busser is a test runner: a failure
+      # has to be a non-zero exit or CI reports a red suite as green. Thor 2
+      # makes this the default; setting it now silences the deprecation on
+      # every failing run and pins the behaviour we already rely on.
+      #
+      # @return [true]
+      def self.exit_on_failure?
+        true
+      end
     end
 
     # Base class for all Thor Group subclasses which includes useful mixins.
@@ -45,6 +56,17 @@ module Busser
       include Helpers
       include UI
       include ::Thor::Actions
+
+      # Thor exits 0 when a command fails unless this is true, and warns on
+      # every failure that it is not set. Busser is a test runner: a failure
+      # has to be a non-zero exit or CI reports a red suite as green. Thor 2
+      # makes this the default; setting it now silences the deprecation on
+      # every failing run and pins the behaviour we already rely on.
+      #
+      # @return [true]
+      def self.exit_on_failure?
+        true
+      end
     end
   end
 end
