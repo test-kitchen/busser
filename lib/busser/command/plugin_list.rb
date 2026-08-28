@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 #
 # Author:: Fletcher Nichol (<fnichol@nichol.ca>)
 #
@@ -16,8 +15,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'busser/plugin'
-require 'busser/thor'
+require "busser/plugin"
+require "busser/thor"
 
 module Busser
 
@@ -33,7 +32,7 @@ module Busser
         if plugin_data.empty?
           say "No plugins installed yet"
         else
-          print_table([["Plugin", "Version"]] + plugin_data)
+          print_table([%w{Plugin Version}] + plugin_data)
         end
       end
 

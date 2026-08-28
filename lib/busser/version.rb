@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 #
 # Author:: Fletcher Nichol (<fnichol@nichol.ca>)
 #
@@ -17,5 +16,5 @@
 # limitations under the License.
 
 module Busser
-  VERSION = "0.8.0"
+  VERSION = "0.8.0".freeze
 end

@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 #
 # Author:: Fletcher Nichol (<fnichol@nichol.ca>)
 #
@@ -16,7 +15,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'busser/thor'
+require "fileutils" unless defined?(FileUtils) # Pathname#rmtree needs it
+require "busser/thor"
 
 module Busser
 
@@ -32,7 +32,7 @@ module Busser
         if suite_path.directory?
           Pathname.glob(suite_path + "*").each do |dir|
             info "Removing #{dir}"
-            dir.rmtree
+            FileUtils.rm_rf(dir)
           end
         else
           info "Suite path directory #{suite_path} does not exist, skipping."

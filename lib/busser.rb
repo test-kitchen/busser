@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 #
 # Author:: Fletcher Nichol (<fnichol@nichol.ca>)
 #
@@ -16,9 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'pathname' unless defined?(Pathname)
+require "pathname" unless defined?(Pathname)
 
-require 'busser/version'
+require "busser/version"
 
 # Busser - Runs tests for projects in Test Kitchen.
 #
@@ -30,6 +29,6 @@ module Busser
   #
   # @return [Pathname] root path of gem
   def self.source_root
-    @source_root ||= Pathname.new(File.expand_path('../../', __FILE__))
+    @source_root ||= Pathname.new(File.expand_path("..", __dir__))
   end
 end

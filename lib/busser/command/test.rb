@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 #
 # Author:: Fletcher Nichol (<fnichol@nichol.ca>)
 #
@@ -16,8 +15,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'busser/thor'
-require 'busser/plugin'
+require "busser/thor"
+require "busser/plugin"
 
 module Busser
 
@@ -29,12 +28,13 @@ module Busser
     #
     class Test < Busser::Thor::BaseGroup
 
-      argument :plugins, :type => :array, :required => false
+      argument :plugins, type: :array, required: false
 
       def perform
         Busser::Plugin.runner_plugins(plugins).each do |runner_path|
           runner = File.basename(runner_path)
           next if skip_runner?(runner)
+
           klass = ::Thor::Util.camel_case(runner)
 
           banner "Running #{runner} test suite"

@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 #
 # Author:: Fletcher Nichol (<fnichol@nichol.ca>)
 #
@@ -16,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'busser/thor'
+require "busser/thor"
 
 module Busser
 
@@ -28,7 +27,7 @@ module Busser
     #
     class SuitePath < Busser::Thor::BaseGroup
 
-      argument :suite_name, :required => false
+      argument :suite_name, required: false
 
       def path
         say suite_path(suite_name).to_s

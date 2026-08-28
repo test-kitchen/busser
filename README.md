@@ -1,8 +1,6 @@
 # Busser
 
 [![Gem Version](https://badge.fury.io/rb/busser.svg)](http://badge.fury.io/rb/busser)
-[![Build Status](https://travis-ci.org/test-kitchen/busser.svg?branch=master)](https://travis-ci.org/test-kitchen/busser)
-[![Code Climate](https://codeclimate.com/github/test-kitchen/busser.svg)](https://codeclimate.com/github/test-kitchen/busser)
 
 Busser is a test setup and execution framework designed to
 work on remote nodes whose system dependencies cannot be relied upon, except
@@ -17,19 +15,76 @@ This software project is no longer under active development as it has no active 
 
 Add this line to your application's Gemfile:
 
-    gem 'busser'
+```ruby
+gem 'busser'
+```
 
 And then execute:
 
-    $ bundle
+```bash
+bundle
+```
 
 Or install it yourself as:
 
-    $ gem install busser
+```bash
+gem install busser
+```
 
 ## Usage
 
-TODO: Write usage instructions here
+Busser is driven by the `busser` command. Run `busser help` (or
+`busser help SUBCOMMAND`) for the full option list.
+
+### Setting up
+
+Create the Busser home directory, where plugins and suites are installed:
+
+```bash
+busser setup
+```
+
+### Working with plugins
+
+Test frameworks are added as plugins, each packaged as a `busser-*` gem:
+
+```bash
+busser plugin install busser-bash    # install a plugin
+busser plugin list                   # list installed plugins
+busser plugin create junit           # scaffold a new plugin
+```
+
+### Laying out tests
+
+Each plugin picks up the tests belonging to it, under a directory named after
+the plugin inside the suite:
+
+```text
+test
+`-- integration
+    `-- default        # suite name
+        |-- bash       # picked up by busser-bash
+        |   `-- my_test.sh
+        `-- minitest   # picked up by busser-minitest
+            `-- test_default.rb
+```
+
+Use `busser suite path` to print where suites live, and `busser suite cleanup`
+to remove them.
+
+### Running tests
+
+Run every installed plugin's suites, or name specific plugins:
+
+```bash
+busser test
+busser test bash minitest
+```
+
+Busser is normally invoked for you by
+[Test Kitchen](https://github.com/test-kitchen/test-kitchen) rather than by
+hand -- Test Kitchen installs Busser on the instance under test and runs
+`busser test` as part of `kitchen verify`.
 
 ## Contributing
 

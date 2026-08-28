@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 #
 # Author:: Fletcher Nichol (<fnichol@nichol.ca>)
 #
@@ -16,10 +15,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'openssl' unless defined?(OpenSSL)
+require "openssl" unless defined?(OpenSSL)
 
-require 'busser/rubygems'
-require 'busser/thor'
+require "busser/rubygems"
+require "busser/thor"
 
 module Busser
 
@@ -33,13 +32,13 @@ module Busser
 
       include Busser::RubyGems
 
-      argument :plugins, :type => :array
+      argument :plugins, type: :array
 
-      class_option :force_postinstall, :type => :boolean, :default => false,
-        :desc => "Run the plugin's postinstall if it is already installed"
+      class_option :force_postinstall, type: :boolean, default: false,
+        desc: "Run the plugin's postinstall if it is already installed"
 
-      class_option :verbose, :type => :boolean, :default => false,
-        :desc => "Set a more verbose output"
+      class_option :verbose, type: :boolean, default: false,
+        desc: "Set a more verbose output"
 
       def install_all
         if options[:verbose]
@@ -56,7 +55,7 @@ module Busser
 
       def install(plugin)
         gem_name, version = plugin.split("@")
-        name = gem_name.sub(/^busser-/, '')
+        name = gem_name.sub(/^busser-/, "")
 
         new_install = install_plugin_gem(gem_name, version, name)
 
@@ -69,11 +68,11 @@ module Busser
       def install_plugin_gem(gem, version, name)
         if internal_plugin?(name) || gem_installed?(gem, version)
           info "Plugin #{name} already installed"
-          return false
+          false
         else
           spec = install_gem(gem, version)
           info "Plugin #{name} installed (version #{spec.version})"
-          return true
+          true
         end
       end
 
@@ -103,11 +102,11 @@ module Busser
       #
       def drop_ssl_verify_peer
         before = OpenSSL::SSL::VERIFY_PEER
-        OpenSSL::SSL.send(:remove_const, 'VERIFY_PEER')
-        OpenSSL::SSL.const_set('VERIFY_PEER', OpenSSL::SSL::VERIFY_NONE)
+        OpenSSL::SSL.send(:remove_const, "VERIFY_PEER")
+        OpenSSL::SSL.const_set("VERIFY_PEER", OpenSSL::SSL::VERIFY_NONE)
         yield
-        OpenSSL::SSL.send(:remove_const, 'VERIFY_PEER')
-        OpenSSL::SSL.const_set('VERIFY_PEER', before)
+        OpenSSL::SSL.send(:remove_const, "VERIFY_PEER")
+        OpenSSL::SSL.const_set("VERIFY_PEER", before)
       end
     end
   end

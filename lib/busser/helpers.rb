@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 #
 # Author:: Fletcher Nichol (<fnichol@nichol.ca>)
 #
@@ -16,9 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'pathname' unless defined?(Pathname)
+require "pathname" unless defined?(Pathname)
 
-require 'busser/rubygems'
+require "busser/rubygems"
 
 module Busser
 
@@ -43,7 +42,7 @@ module Busser
     end
 
     def root_path
-      Pathname.new(ENV['BUSSER_ROOT'] || "/opt/busser")
+      Pathname.new(ENV["BUSSER_ROOT"] || "/opt/busser")
     end
 
     def chef_apply(config = {}, &block)

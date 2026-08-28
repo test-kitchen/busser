@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 #
 # Author:: Fletcher Nichol (<fnichol@nichol.ca>)
 #
@@ -16,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'rubygems/dependency_installer'
+require "rubygems/dependency_installer"
 
 module Busser
 
@@ -33,29 +32,44 @@ module Busser
       ! Gem::Dependency.new(name, version).matching_specs.empty?
     end
 
-    def install_gem(gem, version)
+    def install_gem(gem_name, version)
       version = Gem::Requirement.default unless version
 
+      # A bundler-managed environment can leave Gem.dir pointing at the bundle,
+      # which is not where busser plugins belong. Point RubyGems at GEM_HOME.
+      gem_home = ENV.fetch("GEM_HOME", nil)
+      Gem.use_paths(gem_home, Gem.path) if gem_home && Gem.dir != gem_home
+
       inst = Gem::DependencyInstaller.new(rbg_options)
-      specs = inst.install(gem, Gem::Requirement.create(version))
+      specs = inst.install(gem_name, Gem::Requirement.create(version))
 
       Gem.clear_paths
-      specs.find { |s| s.name == gem }
+      spec = specs.find { |s| s.name == gem_name }
+      # Modern RubyGems does not put a freshly installed gem on the load path.
+      # Add it directly rather than activating, so installing a second version
+      # in the same process does not raise a Gem::LoadError conflict.
+      spec&.full_require_paths&.each do |path|
+        $LOAD_PATH.unshift(path) unless $LOAD_PATH.include?(path)
+      end
+      spec
     end
 
     def rbg_options
       @rbg_options ||= Gem::DependencyInstaller::DEFAULT_OPTIONS.merge(
-        :suggest_alternate => false,
-        :version => Gem::Requirement.default,
-        :without_groups => [],
-        :minimal_deps => true,
-        :http_proxy => ENV.fetch("http_proxy", ENV.fetch("HTTP_PROXY", nil))
+        suggest_alternate: false,
+        version: Gem::Requirement.default,
+        without_groups: [],
+        minimal_deps: true,
+        # Install into GEM_HOME explicitly. Under bundler Gem.dir points at the
+        # bundle path, which is not where busser plugins belong.
+        install_dir: ENV.fetch("GEM_HOME", nil),
+        http_proxy: ENV.fetch("http_proxy", ENV.fetch("HTTP_PROXY", nil))
       )
     end
 
     def silence_gem_ui
       interaction = Gem::DefaultUserInteraction.ui
-      if !Gem.configuration.really_verbose
+      unless Gem.configuration.really_verbose
         Gem::DefaultUserInteraction.ui = Gem::SilentUI.new
       end
       yield

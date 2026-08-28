@@ -18,9 +18,4 @@
 
 require 'fakefs/safe'
 require 'minitest/autorun'
-require 'mocha/setup'
-
-if ENV["COVERAGE"]
-  require 'simplecov'
-  SimpleCov.command_name "unit"
-end
+require 'mocha/minitest'

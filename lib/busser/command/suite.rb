@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 #
 # Author:: Fletcher Nichol (<fnichol@nichol.ca>)
 #
@@ -16,9 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'busser/thor'
-require 'busser/command/suite_cleanup'
-require 'busser/command/suite_path'
+require "busser/thor"
+require "busser/command/suite_cleanup"
+require "busser/command/suite_path"
 
 module Busser
 
