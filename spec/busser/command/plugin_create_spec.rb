@@ -86,12 +86,24 @@ describe Busser::Command::PluginCreate do
       end
     end
 
-    it "depends on what the generated Rakefile needs" do
+    # These moved into the Gemfile, so the gemspec declares only what a
+    # consumer of the gem needs at runtime -- matching the busser-* plugins.
+    it "leaves development dependencies out of the gemspec" do
       generate
 
-      _(dev_dependencies).must_include "rake"
-      _(dev_dependencies).must_include "cucumber"
-      _(dev_dependencies).must_include "aruba"
+      _(dev_dependencies).must_be_empty
+    end
+
+    # busser-bash resolved busser 0.6.0 and failed its own suite because the
+    # requirement was open. A generated plugin should not start there.
+    it "requires a busser new enough to run the generated features" do
+      generate
+
+      busser = gemspec.dependencies.find { |d| d.name == "busser" }
+
+      _(busser).wont_be_nil
+      _(busser.requirement.satisfied_by?(Gem::Version.new("0.9.0"))).must_equal true
+      _(busser.requirement.satisfied_by?(Gem::Version.new("0.6.0"))).must_equal false
     end
 
     it "states a supported Ruby version" do
@@ -110,6 +122,25 @@ describe Busser::Command::PluginCreate do
     def dev_dependencies
       gemspec.development_dependencies.map(&:name)
     end
+  end
+
+  describe "the generated Gemfile" do
+
+    it "declares what the generated Rakefile needs" do
+      generate
+
+      body = File.read(File.join(plugin_dir, "Gemfile"))
+
+      %w{rake cucumber aruba}.each { |g| _(body).must_include "'#{g}'" }
+    end
+
+    # cucumber needs base64 on Ruby 4.0, where it is no longer a default gem.
+    it "declares base64" do
+      generate
+
+      _(File.read(File.join(plugin_dir, "Gemfile"))).must_include "'base64'"
+    end
+
   end
 
   describe "the generated project" do
