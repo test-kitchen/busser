@@ -16,4 +16,7 @@ Feature: Deserialize command
   Scenario: Mismatching MD5 sum fails command
     When I run `bash -c "cat ../../features/files/base64.txt | busser deserialize --destination=decoded.txt --md5sum=nope --perms=0755"`
     Then the output should contain "does not match source file"
-    Then the exit status should not be 0
+    And the exit status should not be 0
+    # The digest was once checked only after the write, so the command failed
+    # while still leaving the unverified file on disk.
+    And the file "decoded.txt" should not exist
