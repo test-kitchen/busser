@@ -1,0 +1,27 @@
+---
+name: "Test"
+
+"on":
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# The default token is granted write access to most of the repository.
+# Nothing here needs more than the checkout.
+permissions:
+  contents: read
+
+# Supersede in-flight runs for a branch. Pull requests cancel freely, but
+# pushes to main do not: every commit on main should keep a build of its own.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  lint-unit:
+    # Pinned to a commit rather than @main so an upstream edit cannot reach
+    # this repository's CI without a reviewed pull request. The trailing
+    # comment names the release the commit belongs to, which is what lets
+    # Renovate track the pin by version and keep both in step.
+    uses: test-kitchen/.github/.github/workflows/lint-unit.yml@dab48f5187b2f34974aa1dc651d2bbd16871cad4  # v0.3.0
