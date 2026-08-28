@@ -24,4 +24,9 @@ jobs:
     # this repository's CI without a reviewed pull request. The trailing
     # comment names the release the commit belongs to, which is what lets
     # Renovate track the pin by version and keep both in step.
-    uses: test-kitchen/.github/.github/workflows/lint-unit.yml@dab48f5187b2f34974aa1dc651d2bbd16871cad4  # v0.3.0
+    uses: test-kitchen/.github/.github/workflows/lint-unit.yml@95ef7803cf23aae5ee68593de5b7e0a731c1a929  # v0.4.0
+    with:
+      # This gem requires Ruby 3.2, and so do minitest 6 and cucumber 11.
+      # Without this the shared workflow would still start a Ruby 3.1 job and
+      # bundler would refuse to resolve there.
+      ruby_versions: '["3.2", "3.3", "3.4", "4.0"]'

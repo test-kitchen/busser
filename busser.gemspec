@@ -16,7 +16,7 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.required_ruby_version = ">= 3.1"
+  spec.required_ruby_version = ">= 3.2"
 
   # thor 1.1.0 references DidYouMean::SPELL_CHECKERS, removed in Ruby 3.1,
   # so the CLI crashed on startup on every supported Ruby
