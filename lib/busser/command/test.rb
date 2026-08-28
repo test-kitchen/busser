@@ -15,6 +15,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+require "shellwords" unless defined?(Shellwords)
+
 require "busser/thor"
 require "busser/plugin"
 
@@ -49,6 +51,18 @@ module Busser
         end
       end
 
+      # Builds the command that runs a suite's prepare.sh.
+      #
+      # The path is quoted. It is rooted at BUSSER_ROOT, which the caller
+      # chooses, so an unquoted path containing a space would be split by the
+      # shell and sh would be handed a fragment instead of the script.
+      #
+      # @param script [String, Pathname] path to the prepare.sh
+      # @return [String] the command to run
+      def self.prepare_sh_command(script)
+        "/bin/sh #{Shellwords.escape(script.to_s)}"
+      end
+
       private
 
       # The dummy runner exists for Busser's own tests, so it only runs when
@@ -78,7 +92,7 @@ module Busser
 
         if prepare_sh_script.exist?
           banner "Preparing #{runner} suite with #{prepare_sh_script}"
-          run!("/bin/sh #{prepare_sh_script}")
+          run!(self.class.prepare_sh_command(prepare_sh_script))
         end
       end
 
