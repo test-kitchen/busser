@@ -2,7 +2,11 @@ require "bundler/gem_tasks"
 require "cucumber/rake/task"
 
 Cucumber::Rake::Task.new(:features) do |t|
-  t.cucumber_opts = ["features", "-x", "--format progress", "--no-color"]
+  # --strict-undefined so the scenarios generated with <YOUR_FILE> placeholders
+  # fail until they are filled in. Undefined steps otherwise pass silently, and
+  # a new plugin reports a green suite that asserts nothing.
+  t.cucumber_opts = ["features", "--format progress", "--fail-fast",
+                     "--strict-undefined"]
 end
 
 desc "Run all test suites"

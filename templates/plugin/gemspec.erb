@@ -15,15 +15,11 @@ Gem::Specification.new do |spec|
   spec.license       = '<%= config[:license_spdx] %>'
 <% end -%>
 
-  spec.files         = `git ls-files`.split($/)
+  spec.files         = `git ls-files -z`.split("\x0")
   spec.executables   = []
   spec.require_paths = ['lib']
 
   spec.required_ruby_version = '>= 3.2'
 
-  spec.add_dependency 'busser'
-
-  spec.add_development_dependency 'rake'
-  spec.add_development_dependency 'aruba', '>= 2.0'
-  spec.add_development_dependency 'cucumber', '>= 9.0'
+  spec.add_dependency 'busser', '>= 0.9.0'
 end
