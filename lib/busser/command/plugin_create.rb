@@ -39,7 +39,22 @@ module Busser
       # Generates a new runner plugin project.
       #
       # @return [void]
+      # A plugin name becomes three things: a require path, a directory name and
+      # a Ruby constant. Only the last is fussy, and Thor's camel_case only
+      # folds underscores -- so "my-junit" produced `module My-junit`, which is
+      # not parseable Ruby. The generator ran to completion and wrote a project
+      # that could not be loaded at all.
+      NAME_PATTERN = /\A[a-z][a-z0-9_]*\z/
+
       def create
+        unless NAME_PATTERN.match?(name)
+          raise ::Thor::Error,
+            "'#{name}' is not a usable plugin name. A name becomes a Ruby " \
+            "constant, so it must start with a lowercase letter and contain " \
+            "only lowercase letters, digits and underscores. Try " \
+            "'#{suggested_name}'."
+        end
+
         self.class.source_root(Busser.source_root.join("templates", "plugin"))
 
         create_core_files
@@ -126,6 +141,12 @@ module Busser
       end
 
       # @return [String] directory the new plugin is generated into
+      # @return [String] the given name reshaped into something usable, for the
+      #   error message
+      def suggested_name
+        name.to_s.downcase.gsub(/[^a-z0-9_]+/, "_").sub(/\A[^a-z]+/, "").squeeze("_")
+      end
+
       def target_dir
         File.join(Dir.pwd, "busser-#{name}")
       end
