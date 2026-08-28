@@ -175,9 +175,15 @@ module Busser
         Gem.paths.home.dup.tap { |p| p.gsub!("/", "\\") if bat? }
       end
 
+      # The separator differs by platform, and the bat binstub is generated on
+      # and for Windows, where RubyGems splits GEM_PATH on ";". Joining with
+      # ":" there produced one unusable entry -- every Windows path already
+      # contains a colon after its drive letter -- so the isolated gem
+      # environment the binstub exists to create silently did not exist.
+      #
       # @return [String] the gem path the binstub exports
       def gem_path
-        Gem.paths.path.join(":").dup.tap { |p| p.gsub!("/", "\\") if bat? }
+        Gem.paths.path.join(bat? ? ";" : ":").dup.tap { |p| p.gsub!("/", "\\") if bat? }
       end
 
       # @return [String] directory holding the real busser executable

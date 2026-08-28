@@ -96,6 +96,27 @@ describe Busser::Command::Setup do
       end
     end
 
+    # Windows RubyGems splits GEM_PATH on ";". Joining with ":" produced one
+    # unusable entry, because every Windows path already contains a colon after
+    # its drive letter -- so the isolated gem environment silently did not
+    # exist and Busser resolved gems from wherever it happened to land.
+    it "separates GEM_PATH entries with the Windows separator" do
+      Gem.paths.stubs(:path).returns(["C:/Ruby34/lib/ruby/gems", "C:/Users/kitchen/.gem"])
+      run_setup(type: "bat")
+
+      _(binstub_body).must_include(
+        'SET "GEM_PATH=C:\\Ruby34\\lib\\ruby\\gems;C:\\Users\\kitchen\\.gem"'
+      )
+    end
+
+    it "does not separate GEM_PATH entries with a colon" do
+      Gem.paths.stubs(:path).returns(["C:/a", "C:/b"])
+      run_setup(type: "bat")
+
+      gem_path = binstub_body[/^SET "GEM_PATH=(.*)"$/, 1]
+      _(gem_path.split(";").length).must_equal 2
+    end
+
     def binstub
       File.join(@tmpdir, "bin", "busser.bat")
     end
