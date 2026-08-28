@@ -96,6 +96,14 @@ module Busser
         )
       elsif status.success?
         true
+      elsif status.exitstatus.nil?
+        # A process killed by a signal has no exit status, and Kernel#exit
+        # rejects nil, so reporting it as an exit code raised a TypeError and
+        # took Busser down with a stack trace rather than a diagnosis. Signals
+        # are how the out of memory killer stops a test run, which is the same
+        # situation the nil status branch above was written for.
+        signal = status.termsig
+        die("#{type} [#{cmd}] was terminated by signal #{signal}", 128 + signal)
       else
         code = status.exitstatus
         die("#{type} [#{cmd}] exit code was #{code}", code)

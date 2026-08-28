@@ -45,10 +45,16 @@ end
 # Stub that mimics a Process::Status object
 class FakeStatus
 
-  attr_reader :exitstatus
+  attr_reader :exitstatus, :termsig
 
-  def initialize(success = true, exitstatus = 0)
-    @success, @exitstatus = success, exitstatus
+  # A process stopped by a signal reports success? as nil rather than false,
+  # carries no exitstatus, and sets termsig instead.
+  def self.signalled(termsig)
+    new(nil, nil, termsig)
+  end
+
+  def initialize(success = true, exitstatus = 0, termsig = nil)
+    @success, @exitstatus, @termsig = success, exitstatus, termsig
   end
 
   def success?
@@ -138,6 +144,26 @@ describe Busser::UI do
       end
     end
 
+    # The out of memory killer stops a run with SIGKILL. exitstatus is nil
+    # there, and reporting it as an exit code used to raise a TypeError from
+    # Kernel#exit, so Busser died with a stack trace instead of saying what
+    # happened.
+    it "reports the signal when the command was killed" do
+      ui.status = FakeStatus.signalled(9)
+      output = capture_stderr { ui.invoke_run!("failwhale") }
+
+      _(output).must_match(/terminated by signal 9/)
+      _(ui.died?).must_equal true
+    end
+
+    it "terminates with 128 plus the signal when the command was killed" do
+      ui.status = FakeStatus.signalled(9)
+
+      capture_stderr do
+        _(ui.invoke_run!("failwhale")).must_equal 137
+      end
+    end
+
     it "terminates the program if status is nil" do
       ui.status = nil
       output = capture_stderr { ui.invoke_run!("failwhale") }
@@ -194,6 +220,26 @@ describe Busser::UI do
 
       capture_stderr do
         _(ui.invoke_run_ruby_script!("nadda.rb")).must_equal 97
+      end
+    end
+
+    # The out of memory killer stops a run with SIGKILL. exitstatus is nil
+    # there, and reporting it as an exit code used to raise a TypeError from
+    # Kernel#exit, so Busser died with a stack trace instead of saying what
+    # happened.
+    it "reports the signal when the command was killed" do
+      ui.status = FakeStatus.signalled(9)
+      output = capture_stderr { ui.invoke_run_ruby_script!("nope.rb") }
+
+      _(output).must_match(/terminated by signal 9/)
+      _(ui.died?).must_equal true
+    end
+
+    it "terminates with 128 plus the signal when the command was killed" do
+      ui.status = FakeStatus.signalled(9)
+
+      capture_stderr do
+        _(ui.invoke_run_ruby_script!("nope.rb")).must_equal 137
       end
     end
 

@@ -79,9 +79,19 @@ module Busser
             SET "GEM_PATH=#{gem_path}"
             SET "GEM_CACHE=#{gem_home}\\cache"
 
-            REM Unset RUBYOPT, we don't want this bleeding into our runtime.
+            REM Keep the calling Ruby environment out of this one. Clearing
+            REM RUBYOPT is no longer enough: RubyGems requires bundler/setup
+            REM whenever BUNDLER_SETUP is set, and bundler then points GEM_HOME
+            REM at the calling project's bundle, undoing the isolation above.
             SET RUBYOPT=
             SET GEMRC=
+            SET RUBYLIB=
+            SET BUNDLER_SETUP=
+            SET BUNDLER_VERSION=
+            SET BUNDLE_BIN_PATH=
+            SET BUNDLE_GEMFILE=
+            SET BUNDLE_LOCKFILE=
+            SET BUNDLE_PATH=
 
             REM Call the actual Busser bin with our arguments
             "#{ruby_bin}" "#{gem_bindir}\\busser" %*
@@ -120,8 +130,12 @@ module Busser
             GEM_PATH="#{gem_path}"; export GEM_PATH
             GEM_CACHE="#{gem_home}/cache"; export GEM_CACHE
 
-            # Unset RUBYOPT, we don't want this bleeding into our runtime.
-            unset RUBYOPT GEMRC
+            # Keep the calling Ruby environment out of this one. Unsetting
+            # RUBYOPT is no longer enough: RubyGems requires bundler/setup
+            # whenever BUNDLER_SETUP is set, and bundler then points GEM_HOME
+            # at the calling project's bundle, undoing the isolation above.
+            unset RUBYOPT GEMRC RUBYLIB BUNDLER_SETUP BUNDLER_VERSION
+            unset BUNDLE_BIN_PATH BUNDLE_GEMFILE BUNDLE_LOCKFILE BUNDLE_PATH
 
             # Call the actual Busser bin with our arguments
             exec "#{ruby_bin}" "#{gem_bindir}/busser" "$@"
