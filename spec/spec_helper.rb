@@ -16,6 +16,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'fakefs/safe'
 require 'minitest/autorun'
 require 'mocha/minitest'
