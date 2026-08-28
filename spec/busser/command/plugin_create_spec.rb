@@ -183,9 +183,51 @@ describe Busser::Command::PluginCreate do
     end
   end
 
-  def generate(license: "apachev2")
+  # A name becomes a Ruby constant, and Thor's camel_case only folds
+  # underscores. "my-junit" produced `module My-junit`, which does not parse --
+  # and the generator ran to completion anyway, leaving a project that could
+  # not be loaded at all.
+  describe "the plugin name" do
+
+    %w{demo junit my_junit j2 x}.each do |name|
+      it "accepts #{name.inspect}" do
+        generate(name: name)
+
+        _(Dir.exist?(File.join(@tmpdir, "busser-#{name}"))).must_equal true
+      end
+    end
+
+    {
+      "my-junit" => "a hyphen cannot appear in a constant",
+      "My_Junit" => "an uppercase start is not a plugin name",
+      "2fast" => "a constant cannot start with a digit",
+      "my junit" => "a space cannot appear in a constant or a path",
+      "" => "an empty name",
+      "../escaped" => "a path fragment",
+    }.each do |name, why|
+      it "rejects #{name.inspect} -- #{why}" do
+        err = _(proc { generate(name: name) }).must_raise ::Thor::Error
+
+        _(err.message).must_include "not a usable plugin name"
+      end
+    end
+
+    it "writes nothing when the name is rejected" do
+      _(proc { generate(name: "my-junit") }).must_raise ::Thor::Error
+
+      _(Dir.glob(File.join(@tmpdir, "*"))).must_be_empty
+    end
+
+    it "suggests a usable name" do
+      err = _(proc { generate(name: "my-junit") }).must_raise ::Thor::Error
+
+      _(err.message).must_include "'my_junit'"
+    end
+  end
+
+  def generate(license: "apachev2", name: "demo")
     command = Busser::Command::PluginCreate.new(
-      ["demo"], { "type" => "runner", "license" => license }
+      [name], { "type" => "runner", "license" => license }
     )
     command.stubs(:initialize_git)
     capture_stdout { command.create }
