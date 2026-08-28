@@ -57,9 +57,7 @@ module Busser
         create_template("gemspec.erb", "#{config[:gem_name]}.gemspec")
         create_template("license_#{config[:license]}.erb", license_filename)
         create_template("gitignore.erb", ".gitignore")
-        create_template("tailor.erb", ".tailor")
-        create_template("travis.yml.erb", ".travis.yml")
-        create_file(File.join(target_dir, ".cane"))
+        create_template("github_workflow.yml.erb", ".github/workflows/test.yml")
       end
 
       def create_source_files
@@ -128,6 +126,7 @@ module Busser
             email: email,
             license: options[:license],
             license_string: license_string,
+            license_spdx: license_spdx,
             year: Time.now.year,
           }
         end
@@ -149,6 +148,21 @@ module Busser
         when "apachev2" then "Apache 2.0"
         when "lgplv3" then "LGPL 3.0"
         when "reserved" then "All rights reserved"
+        else
+          raise ArgumentError, "No such license #{options[:license]}"
+        end
+      end
+
+      # RubyGems validates spec.license against the SPDX list and warns on
+      # anything else, so the gemspec cannot reuse the human readable name
+      # that the README wants. "All rights reserved" has no SPDX identifier,
+      # so those gemspecs declare no license at all.
+      def license_spdx
+        case options[:license]
+        when "mit" then "MIT"
+        when "apachev2" then "Apache-2.0"
+        when "lgplv3" then "LGPL-3.0-only"
+        when "reserved" then nil
         else
           raise ArgumentError, "No such license #{options[:license]}"
         end

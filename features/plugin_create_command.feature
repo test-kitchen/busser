@@ -11,7 +11,7 @@ Feature: Plugin create command
     ## 0.1.0 / Unreleased
     """
     And the file "busser-junit/Gemfile" should contain "gemspec"
-    And the file "busser-junit/Rakefile" should contain "task :stats"
+    And the file "busser-junit/Rakefile" should contain "Cucumber::Rake::Task"
     And the file "busser-junit/README.md" should contain:
     """
     Busser::RunnerPlugin::Junit
@@ -28,15 +28,13 @@ Feature: Plugin create command
     """
     Gemfile.lock
     """
-    And the file "busser-junit/.tailor" should contain:
+    And the file "busser-junit/.github/workflows/test.yml" should contain:
     """
-    config.file_set 'lib/**/*.rb'
+    bundle exec rake test
     """
-    And the file "busser-junit/.travis.yml" should contain:
-    """
-    language: ruby
-    """
-    And a file named "busser-junit/.cane" should exist
+    And a file named "busser-junit/.travis.yml" should not exist
+    And a file named "busser-junit/.tailor" should not exist
+    And a file named "busser-junit/.cane" should not exist
     And the file "busser-junit/lib/busser/junit/version.rb" should contain:
     """
     module Busser
@@ -49,7 +47,7 @@ Feature: Plugin create command
     """
     And the file "busser-junit/features/support/env.rb" should contain:
     """
-    require 'busser/cucumber'
+    require "busser/cucumber"
     """
     And the file "busser-junit/features/plugin_install_command.feature" should contain:
     """
