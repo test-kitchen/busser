@@ -1,6 +1,6 @@
-require_relative '../spec_helper'
+require_relative "../spec_helper"
 
-require 'busser/ui'
+require "busser/ui"
 
 # Dummy class containing diagnostic methods approximating Thor mixins
 class SneakyUI
@@ -11,7 +11,7 @@ class SneakyUI
   attr_accessor :status
 
   def say(msg)
-     msg
+    msg
   end
 
   def error(msg)
@@ -111,7 +111,7 @@ describe Busser::UI do
 
       _(ui.run_args).must_equal([
         "doitpls",
-        { :capture => false, :verbose => false}
+        { capture: false, verbose: false },
       ])
     end
 
@@ -181,16 +181,16 @@ describe Busser::UI do
 
       _(ui.run_ruby_script_args).must_equal([
         "theworks.rb",
-        { :capture => false, :verbose => false }
+        { capture: false, verbose: false },
       ])
     end
 
     it "calls #run_ruby_script with correct default options" do
-      ui.invoke_run_ruby_script!("theworks.rb", :verbose => true)
+      ui.invoke_run_ruby_script!("theworks.rb", verbose: true)
 
       _(ui.run_ruby_script_args).must_equal([
         "theworks.rb",
-        { :capture => false, :verbose => true }
+        { capture: false, verbose: true },
       ])
     end
 
