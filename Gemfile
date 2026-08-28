@@ -10,7 +10,7 @@ group :test do
   # supports 3.1. The specs themselves no longer hold these back: they use the
   # _() expectation syntax and pass on minitest 6 and cucumber 11 today. Unpin
   # once the supported Ruby floor moves.
-  gem "minitest", "~> 5.0"
+  gem "minitest", "~> 6.0"
   gem "base64" # cucumber 9.x needs it; not a default gem on Ruby 4.0
   gem "cucumber", "~> 9.0"
   gem "rake"
