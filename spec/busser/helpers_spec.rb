@@ -1,6 +1,6 @@
-require_relative '../spec_helper'
+require_relative "../spec_helper"
 
-require 'busser/helpers'
+require "busser/helpers"
 
 describe Busser::Helpers do
 
@@ -25,16 +25,16 @@ describe Busser::Helpers do
 
     describe "with a custom root path" do
 
-      before  { ENV['_SPEC_BUSSER_ROOT'] = ENV['BUSSER_ROOT'] }
-      after   { ENV['BUSSER_ROOT'] = ENV.delete('_SPEC_BUSSER_ROOT') }
+      before  { ENV["_SPEC_BUSSER_ROOT"] = ENV["BUSSER_ROOT"] }
+      after   { ENV["BUSSER_ROOT"] = ENV.delete("_SPEC_BUSSER_ROOT") }
 
       it "returns a base path if no suite name is given" do
-        ENV['BUSSER_ROOT'] = "/path/to/busser"
+        ENV["BUSSER_ROOT"] = "/path/to/busser"
         _(suite_path.to_s).must_match %r{/path/to/busser/suites$}
       end
 
       it "returns a suite path given a suite name" do
-        ENV['BUSSER_ROOT'] = "/path/to/busser"
+        ENV["BUSSER_ROOT"] = "/path/to/busser"
         _(suite_path("fuzzy").to_s).must_match %r{/path/to/busser/suites/fuzzy$}
       end
     end
@@ -59,16 +59,16 @@ describe Busser::Helpers do
 
     describe "with a custom root path" do
 
-      before  { ENV['_SPEC_BUSSER_ROOT'] = ENV['BUSSER_ROOT'] }
-      after   { ENV['BUSSER_ROOT'] = ENV.delete('_SPEC_BUSSER_ROOT') }
+      before  { ENV["_SPEC_BUSSER_ROOT"] = ENV["BUSSER_ROOT"] }
+      after   { ENV["BUSSER_ROOT"] = ENV.delete("_SPEC_BUSSER_ROOT") }
 
       it "returns a base path if no product name is given" do
-        ENV['BUSSER_ROOT'] = "/path/to/busser"
+        ENV["BUSSER_ROOT"] = "/path/to/busser"
         _(vendor_path.to_s).must_match %r{/path/to/busser/vendor$}
       end
 
       it "returns a suite path given a product name" do
-        ENV['BUSSER_ROOT'] = "/path/to/busser"
+        ENV["BUSSER_ROOT"] = "/path/to/busser"
         _(vendor_path("maximal").to_s).must_match \
           %r{/path/to/busser/vendor/maximal$}
       end

@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 #
 # Author:: Fletcher Nichol (<fnichol@nichol.ca>)
 #
@@ -16,5 +15,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'minitest/autorun'
-require 'mocha/minitest'
+require "minitest/autorun"
+require "mocha/minitest"
