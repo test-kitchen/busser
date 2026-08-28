@@ -1,3 +1,38 @@
+## [0.9.0](https://github.com/test-kitchen/busser/compare/v0.8.0...v0.9.0) (2026-08-28)
+
+The first release since 2020. Busser now runs on current Ruby, which is the
+main reason to take this version.
+
+### Breaking changes
+
+* Ruby 3.2 or newer is now required ([#61](https://github.com/test-kitchen/busser/pull/61))
+
+### Bug fixes
+
+* The CLI no longer crashes on startup on modern Ruby. thor 1.1 and newer are
+  required, because earlier versions reference `DidYouMean::SPELL_CHECKERS`,
+  which Ruby 3.1 removed ([#54](https://github.com/test-kitchen/busser/pull/54))
+* `base64` is declared as a runtime dependency. It stopped being a default gem,
+  so `busser deserialize` failed to load on Ruby 3.4 and
+  newer ([#54](https://github.com/test-kitchen/busser/pull/54))
+* A plugin installed at more than one version is no longer reported once per
+  version. `busser test` ran that plugin's suite repeatedly and
+  `busser plugin list` printed it repeatedly ([#64](https://github.com/test-kitchen/busser/pull/64))
+* `busser deserialize` verifies the md5 digest before writing. It previously
+  checked afterwards, so a corrupted or truncated stream left the unverified
+  file on disk with its requested permissions, even though the command
+  failed ([#64](https://github.com/test-kitchen/busser/pull/64))
+
+### Maintenance
+
+* Test suites run on Ruby 3.2 through 4.0 with minitest 6 and cucumber 11, and
+  the cucumber suite moved to aruba 2 ([#54](https://github.com/test-kitchen/busser/pull/54), [#60](https://github.com/test-kitchen/busser/pull/60), [#61](https://github.com/test-kitchen/busser/pull/61))
+* CI runs on pushes to main, uses a least privilege token, and pins the shared
+  workflow to a release ([#59](https://github.com/test-kitchen/busser/pull/59))
+* Releases are automated with release-please ([#62](https://github.com/test-kitchen/busser/pull/62))
+* Rewritten README, and development documentation moved to
+  CONTRIBUTING.md ([#63](https://github.com/test-kitchen/busser/pull/63))
+
 ## 0.8.0 / 2020-08-20
 
 - Add http_proxy support to `busser plugin install`
