@@ -87,6 +87,88 @@ busser test
 busser test bash minitest
 ```
 
+## Using Busser with Test Kitchen
+
+This is how most people meet Busser, and it needs no `busser` commands of your
+own. Select the verifier in `kitchen.yml`:
+
+```yaml
+verifier:
+  name: busser
+
+suites:
+  - name: default
+```
+
+Then put tests in a directory named after the plugin that should run them,
+inside the suite:
+
+```text
+test/integration/default/bash/smoke_test.sh
+```
+
+`kitchen verify` installs Busser and the matching plugin on the instance, then
+runs the suite. Which plugin runs is decided by that directory name alone --
+`bash/` is picked up by busser-bash, `minitest/` by busser-minitest, and so on.
+There is nothing else to configure.
+
+## A worked example, without Test Kitchen
+
+To see Busser on its own, set a `BUSSER_ROOT` you can write to:
+
+```bash
+export BUSSER_ROOT=/tmp/busser
+busser setup
+busser plugin install busser-bash
+mkdir -p "$BUSSER_ROOT/suites/bash"
+
+cat > "$BUSSER_ROOT/suites/bash/smoke_test.sh" <<'SH'
+#!/usr/bin/env bash
+set -euo pipefail
+echo hello
+SH
+
+busser test bash
+```
+
+A passing run looks like this, and exits `0`:
+
+```text
+-----> Running bash test suite
+-----> [bash] smoke_test.sh
+hello
+```
+
+A failing one names the command and exits non-zero:
+
+```text
+-----> Running bash test suite
+-----> [bash] smoke_test.sh
+!!!!!! Command [bash /tmp/busser/suites/bash/smoke_test.sh] exit code was 1
+```
+
+## When nothing runs
+
+A suite whose files do not match what the plugin looks for produces this, and
+**exits `0`**:
+
+```text
+-----> Running bash test suite
+```
+
+No tests ran, and nothing said so. If a suite looks like it is being skipped,
+work through these in order:
+
+1. **Is the plugin installed?** `busser plugin list` shows what is available.
+   Without the plugin, `busser test` has no runner for that directory.
+2. **Is the directory named after the plugin?** Tests for busser-bash live in
+   `bash/`, not `tests/` or `scripts/`.
+3. **Do the filenames match?** Each plugin globs for its own pattern -- for
+   example busser-bash takes `*_test.sh` and `*_spec.bash` but ignores
+   `mytest.sh`. Each plugin's README states its pattern.
+4. **Is `BUSSER_ROOT` what you think?** `busser suite path` prints where suites
+   are actually being looked for.
+
 ## Contributing
 
 Bug reports and pull requests are welcome. See
