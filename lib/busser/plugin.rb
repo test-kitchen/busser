@@ -34,16 +34,22 @@ module Busser
 
     def runner_plugins(plugin_names = nil)
       if plugin_names
-        Array(plugin_names).map { |plugin| runner_plugin(plugin) }
+        Array(plugin_names).map { |plugin| runner_plugin(plugin) }.uniq
       else
         all_runner_plugins
       end
     end
 
+    # Gem.find_files searches every installed gem version, not just the
+    # newest, so a machine holding two versions of a plugin gem reports that
+    # plugin twice. Callers treat each entry as one suite to run, so the
+    # duplicates made `busser test` run a suite twice and `busser plugin list`
+    # print it twice. The path is what gets required, and require resolves to
+    # the active version, so collapsing the repeats is safe.
     def all_runner_plugins
       Gem.find_files("busser/runner_plugin/*.rb").map do |file|
         "busser/runner_plugin/#{File.basename(file).sub(/\.rb$/, "")}"
-      end
+      end.uniq
     end
 
     def require!(plugin_path)

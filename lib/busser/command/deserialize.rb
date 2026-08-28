@@ -42,13 +42,17 @@ module Busser
         file = File.expand_path(options[:destination])
         contents = Base64.decode64(STDIN.read)
 
-        FileUtils.mkdir_p(File.dirname(file))
-        File.open(file, "wb") { |f| f.write(contents) }
-        FileUtils.chmod(Integer(options[:perms]), file)
-
+        # Verify before writing. Checking afterwards still failed the command,
+        # but only once the unverified content was already on disk with its
+        # requested permissions, so a truncated stream left an executable file
+        # behind for anything later to pick up.
         if Digest::MD5.hexdigest(contents) != options[:md5sum]
           abort "Streamed file #{file} does not match source file md5"
         end
+
+        FileUtils.mkdir_p(File.dirname(file))
+        File.open(file, "wb") { |f| f.write(contents) }
+        FileUtils.chmod(Integer(options[:perms]), file)
       end
     end
   end
