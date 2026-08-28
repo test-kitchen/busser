@@ -33,6 +33,16 @@ main reason to take this version.
 * Rewritten README, and development documentation moved to
   CONTRIBUTING.md ([#63](https://github.com/test-kitchen/busser/pull/63))
 
+## [0.9.2](https://github.com/test-kitchen/busser/compare/v0.9.1...v0.9.2) (2026-08-28)
+
+
+### Bug Fixes
+
+* quote the prepare.sh path before handing it to a shell ([#73](https://github.com/test-kitchen/busser/issues/73)) ([00a24a4](https://github.com/test-kitchen/busser/commit/00a24a4d4c286f50ac698b2cda9e9600b1c54322))
+* restore SSL verification if a plugin postinstall raises ([#72](https://github.com/test-kitchen/busser/issues/72)) ([7f26adb](https://github.com/test-kitchen/busser/commit/7f26adbca1682bd152afb8fc15d90feb55c15d8e))
+* stop `busser plugin list` printing git errors and a phantom plugin ([#77](https://github.com/test-kitchen/busser/issues/77)) ([7a99ebd](https://github.com/test-kitchen/busser/commit/7a99ebd8453ddc836bc0abf0af0f639f07b8d554))
+* tell Thor to exit non-zero when a command fails ([#76](https://github.com/test-kitchen/busser/issues/76)) ([218ba31](https://github.com/test-kitchen/busser/commit/218ba31b812db55cba2479ba6345d305743cb0c1))
+
 ## [0.9.1](https://github.com/test-kitchen/busser/compare/v0.9.0...v0.9.1) (2026-08-28)
 
 
