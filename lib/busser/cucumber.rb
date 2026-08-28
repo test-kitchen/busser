@@ -56,24 +56,29 @@ Given(/^a sandboxed GEM_HOME directory named "(.*?)"$/) do |name|
 end
 
 Given(/^a non bundler environment$/) do
-  %w{BUNDLER_EDITOR BUNDLE_BIN_PATH BUNDLE_GEMFILE RUBYOPT}.each do |key|
+  # Where bundler is currently serving gems from: vendor/bundle/ruby/<abi>
+  # when the bundle is vendored, the system gem directory otherwise. Busser's
+  # own runtime dependencies live there, so the child still needs it on
+  # GEM_PATH once bundler is gone. Read it while RubyGems still points at it.
+  bundled_gem_dir = Gem.dir
+
+  # RubyGems auto-requires bundler/setup whenever BUNDLER_SETUP is set, so
+  # leaving that behind lets bundler re-activate inside the child, walk up to
+  # this repository's Gemfile and .bundle/config, and reset GEM_HOME to the
+  # bundle -- plugins would install there instead of the sandbox.
+  %w{
+    BUNDLER_EDITOR BUNDLER_SETUP BUNDLER_VERSION
+    BUNDLE_BIN_PATH BUNDLE_GEMFILE BUNDLE_LOCKFILE BUNDLE_PATH
+    RUBYLIB RUBYOPT
+  }.each do |key|
     backup_envvar(key)
     ENV.delete(key)
     delete_environment_variable(key)
   end
 
-  # BUNDLE_PATH makes RubyGems install into the bundle rather than GEM_HOME,
-  # so drop it -- but keep the bundle's gems reachable through GEM_PATH.
-  if ENV["BUNDLE_PATH"]
-    bundled = Dir.glob(File.join(ENV["BUNDLE_PATH"], "ruby", "*")).first
-    backup_envvar("BUNDLE_PATH")
-    ENV.delete("BUNDLE_PATH")
-    delete_environment_variable("BUNDLE_PATH")
-    if bundled
-      ENV["GEM_PATH"] = [ENV["GEM_PATH"], bundled].compact.reject(&:empty?).join(":")
-      set_environment_variable("GEM_PATH", ENV["GEM_PATH"])
-    end
-  end
+  ENV["GEM_PATH"] =
+    [ENV["GEM_PATH"], bundled_gem_dir].compact.reject(&:empty?).join(":")
+  set_environment_variable("GEM_PATH", ENV["GEM_PATH"])
 end
 
 Then(/^the suite directory named "(.*?)" should exist$/) do |name|
