@@ -27,11 +27,24 @@ module Busser
 
     module_function
 
+    # @param name [String] the gem name
+    # @param version [String, nil] a requirement string, or nil for any version
+    # @return [Boolean] true if a matching gem is already available
     def gem_installed?(name, version)
       version = Gem::Requirement.default unless version
       ! Gem::Dependency.new(name, version).matching_specs.empty?
     end
 
+    # Installs a gem into GEM_HOME.
+    #
+    # RubyGems under bundler points Gem.dir at the bundle, which is not where
+    # Busser plugins belong, so GEM_HOME is applied explicitly before the
+    # install and the freshly installed spec is put on the load path by hand.
+    #
+    # @param gem_name [String] the gem name
+    # @param version [String, nil] a requirement string, or nil for any version
+    # @return [Gem::Specification, nil] the installed spec, or nil if the gem
+    #   was not among those installed
     def install_gem(gem_name, version)
       version = Gem::Requirement.default unless version
 
@@ -54,6 +67,8 @@ module Busser
       spec
     end
 
+    # @return [Hash] options handed to RubyGems' dependency installer, with
+    #   the install directory pinned to GEM_HOME
     def rbg_options
       @rbg_options ||= Gem::DependencyInstaller::DEFAULT_OPTIONS.merge(
         suggest_alternate: false,
@@ -67,6 +82,11 @@ module Busser
       )
     end
 
+    # Runs a block with RubyGems' own progress output suppressed, unless the
+    # user asked for verbose output.
+    #
+    # @yield the block to run quietly
+    # @return [Object] whatever the block returned
     def silence_gem_ui
       interaction = Gem::DefaultUserInteraction.ui
       unless Gem.configuration.really_verbose

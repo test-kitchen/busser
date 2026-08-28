@@ -16,5 +16,6 @@
 # limitations under the License.
 
 module Busser
+  # Version string for Busser
   VERSION = "0.9.1".freeze
 end

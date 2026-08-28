@@ -32,6 +32,10 @@ module Busser
         desc: "Type of binstub file to create (bourne or bat)",
         default: "bourne"
 
+      # Creates the Busser root and the binstub that runs Busser with an
+      # isolated gem environment.
+      #
+      # @return [void]
       def perform
         banner "Setting up Busser"
         create_busser_root
@@ -40,11 +44,15 @@ module Busser
 
       private
 
+      # @return [void]
       def create_busser_root
         info "Creating BUSSER_ROOT in #{root_path}"
         empty_directory(root_path, verbose: false)
       end
 
+      # Writes the binstub, in whichever flavour --type asked for.
+      #
+      # @return [void]
       def generate_busser_binstub
         info "Creating busser binstub"
 
@@ -55,6 +63,9 @@ module Busser
         end
       end
 
+      # Writes a Windows batch binstub.
+      #
+      # @return [void]
       def generate_busser_binstub_for_bat
         binstub = root_path + "bin/busser.bat"
         busser_root = root_path.to_s.gsub("/", "\\")
@@ -105,6 +116,9 @@ module Busser
         end
       end
 
+      # Writes a Bourne shell binstub, executable.
+      #
+      # @return [void]
       def generate_busser_binstub_for_bourne
         binstub = root_path + "bin/busser"
 
@@ -144,6 +158,8 @@ module Busser
         chmod(binstub, 0755, verbose: false)
       end
 
+      # @return [String] path to the Ruby that is running Busser, in the path
+      #   style the target binstub needs
       def ruby_bin
         result = if (bindir = RbConfig::CONFIG["bindir"])
                    File.join(bindir, "ruby")
@@ -154,18 +170,22 @@ module Busser
         result
       end
 
+      # @return [String] the isolated gem home the binstub exports
       def gem_home
         Gem.paths.home.dup.tap { |p| p.gsub!("/", "\\") if bat? }
       end
 
+      # @return [String] the gem path the binstub exports
       def gem_path
         Gem.paths.path.join(":").dup.tap { |p| p.gsub!("/", "\\") if bat? }
       end
 
+      # @return [String] directory holding the real busser executable
       def gem_bindir
         Gem.bindir.dup.tap { |p| p.gsub!("/", "\\") if bat? }
       end
 
+      # @return [Boolean] true when generating a Windows batch binstub
       def bat?
         options[:type] == "bat"
       end

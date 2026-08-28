@@ -40,6 +40,9 @@ module Busser
       class_option :verbose, type: :boolean, default: false,
         desc: "Set a more verbose output"
 
+      # Installs each requested plugin.
+      #
+      # @return [void]
       def install_all
         if options[:verbose]
           Gem.configuration.verbose = 2 if options[:verbose]
@@ -53,6 +56,10 @@ module Busser
 
       private
 
+      # Installs one plugin and runs its postinstall.
+      #
+      # @param plugin [String] gem name, optionally suffixed with @version
+      # @return [void]
       def install(plugin)
         gem_name, version = plugin.split("@")
         name = gem_name.sub(/^busser-/, "")
@@ -65,6 +72,12 @@ module Busser
         end
       end
 
+      # Installs the plugin gem unless it is already available.
+      #
+      # @param gem [String] the gem name
+      # @param version [String, nil] a version requirement, or nil for any
+      # @param name [String] short plugin name, for the message
+      # @return [Boolean] true if the gem was newly installed
       def install_plugin_gem(gem, version, name)
         if internal_plugin?(name) || gem_installed?(gem, version)
           info "Plugin #{name} already installed"
@@ -76,10 +89,17 @@ module Busser
         end
       end
 
+      # @param name [String] short plugin name
+      # @return [void]
       def load_plugin(name)
         Busser::Plugin.require!(Busser::Plugin.runner_plugin(name))
       end
 
+      # Runs the plugin's postinstall block, which is where a plugin installs
+      # the test framework it drives.
+      #
+      # @param name [String] short plugin name
+      # @return [void]
       def run_postinstall(name)
         klass = Busser::Plugin.runner_class(::Thor::Util.camel_case(name))
         if klass.respond_to?(:run_postinstall)

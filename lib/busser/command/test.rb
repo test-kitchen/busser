@@ -20,6 +20,7 @@ require "busser/plugin"
 
 module Busser
 
+  # Namespace for Busser's subcommands.
   module Command
 
     # Test command.
@@ -30,6 +31,10 @@ module Busser
 
       argument :plugins, type: :array, required: false
 
+      # Runs each requested plugin's suite, or every installed plugin's suite
+      # when none were named.
+      #
+      # @return [void]
       def perform
         Busser::Plugin.runner_plugins(plugins).each do |runner_path|
           runner = File.basename(runner_path)
@@ -46,15 +51,28 @@ module Busser
 
       private
 
+      # The dummy runner exists for Busser's own tests, so it only runs when
+      # asked for by name.
+      #
+      # @param runner [String] short plugin name
+      # @return [Boolean] true if this runner should be passed over
       def skip_runner?(runner)
         runner == "dummy" && ! Array(plugins).include?("dummy")
       end
 
+      # Runs whatever preparation the suite ships before its tests.
+      #
+      # @param runner [String] short plugin name
+      # @return [void]
       def prepare_suite(runner)
         run_prepare_sh(runner)
         run_prepare_recipe(runner)
       end
 
+      # Runs the suite's prepare.sh, if it has one.
+      #
+      # @param runner [String] short plugin name
+      # @return [void]
       def run_prepare_sh(runner)
         prepare_sh_script = suite_path(runner).join("prepare.sh")
 
@@ -64,6 +82,11 @@ module Busser
         end
       end
 
+      # Warns if the suite still ships the prepare_recipe.rb that Busser
+      # dropped support for, rather than ignoring it silently.
+      #
+      # @param runner [String] short plugin name
+      # @return [void]
       def run_prepare_recipe(runner)
         prepare_recipe = suite_path(runner).join("prepare_recipe.rb")
 

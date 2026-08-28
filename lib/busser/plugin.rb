@@ -17,6 +17,7 @@
 
 module Busser
 
+  # Namespace that runner plugins define their classes inside.
   module RunnerPlugin
   end
 
@@ -28,10 +29,17 @@ module Busser
 
     module_function
 
+    # @param plugin_name [String] short plugin name, such as "bash"
+    # @return [String] the path to require for that plugin
     def runner_plugin(plugin_name)
       "busser/runner_plugin/#{plugin_name}"
     end
 
+    # Require paths for the named plugins, or for every installed plugin.
+    #
+    # @param plugin_names [Array<String>, String, nil] plugin names, or nil for
+    #   everything installed
+    # @return [Array<String>] require paths, without duplicates
     def runner_plugins(plugin_names = nil)
       if plugin_names
         Array(plugin_names).map { |plugin| runner_plugin(plugin) }.uniq
@@ -46,22 +54,40 @@ module Busser
     # duplicates made `busser test` run a suite twice and `busser plugin list`
     # print it twice. The path is what gets required, and require resolves to
     # the active version, so collapsing the repeats is safe.
+    # Require paths for every runner plugin installed on this machine.
+    #
+    # @return [Array<String>] require paths, without duplicates
     def all_runner_plugins
       Gem.find_files("busser/runner_plugin/*.rb").map do |file|
         "busser/runner_plugin/#{File.basename(file).sub(/\.rb$/, "")}"
       end.uniq
     end
 
+    # Requires a plugin, exiting with a readable message rather than a
+    # backtrace if it cannot be loaded.
+    #
+    # @param plugin_path [String] the path to require
+    # @return [void]
     def require!(plugin_path)
       require plugin_path
     rescue LoadError => e
       Busser::UI.die "Could not load #{plugin_path} (#{e.class}: #{e.message})"
     end
 
+    # @param klass [String, Symbol] a constant name inside
+    #   {Busser::RunnerPlugin}
+    # @return [Class] the runner plugin class
     def runner_class(klass)
       Busser::RunnerPlugin.const_get(klass)
     end
 
+    # Finds the gemspec a plugin was loaded from.
+    #
+    # A plugin being developed locally is not an installed gem, so the local
+    # gemspec is preferred when the plugin resolves inside the working tree.
+    #
+    # @param plugin_path [String] the plugin's require path
+    # @return [Gem::Specification] the spec the plugin belongs to
     def gem_from_path(plugin_path)
       local_gem_path = "#{File.expand_path(plugin_path, $LOAD_PATH.first)}"
       local_gemspec = File.join(

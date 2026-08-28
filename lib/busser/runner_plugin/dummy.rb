@@ -34,6 +34,9 @@ class Busser::RunnerPlugin::Dummy < Busser::RunnerPlugin::Base
     create_file("#{dummy_path}/foobar.txt", "The Dummy Driver.")
   end
 
+  # Prints a line so Busser's own suite can prove a plugin ran.
+  #
+  # @return [void]
   def test
     banner "[dummy] Running"
     if File.exist?(File.join(suite_path("dummy"), "foobar.txt"))

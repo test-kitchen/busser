@@ -14,3 +14,7 @@ group :test do
   gem "mocha", ">= 2.7"
   gem "rake", ">= 13.4"
 end
+
+group :development do
+  gem "yard", ">= 0.9.37"
+end
