@@ -41,13 +41,20 @@ module Busser
 
       private
 
+      # The dummy runner is a fixture shipped inside busser for its own tests,
+      # not something anyone installed. `busser test` already passes over it,
+      # so listing it as an installed plugin was inconsistent as well as
+      # confusing.
+      #
       # @return [Array<Array(String, String)>] each installed plugin's short
       #   name and version
       def plugin_data
-        @plugin_data ||= Busser::Plugin.runner_plugins.map do |path|
-          spec = Busser::Plugin.gem_from_path(path)
-          [File.basename(path), (spec && spec.version)]
-        end
+        @plugin_data ||= Busser::Plugin.runner_plugins
+          .reject { |path| File.basename(path) == "dummy" }
+          .map do |path|
+            spec = Busser::Plugin.gem_from_path(path)
+            [File.basename(path), (spec && spec.version)]
+          end
       end
     end
   end

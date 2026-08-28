@@ -89,16 +89,32 @@ module Busser
     # @param plugin_path [String] the plugin's require path
     # @return [Gem::Specification] the spec the plugin belongs to
     def gem_from_path(plugin_path)
-      local_gem_path = "#{File.expand_path(plugin_path, $LOAD_PATH.first)}"
-      local_gemspec = File.join(
-        File.dirname($LOAD_PATH.first), "busser.gemspec"
-      )
+      # Ask RubyGems first. Loading a gemspec *evaluates* it, and these
+      # gemspecs shell out to `git ls-files` to build their file list -- so
+      # asking the working tree first printed "fatal: not a git repository"
+      # into the middle of `busser plugin list` for every installed plugin.
+      # find_by_path answers from the installed specs without running anything.
+      Gem::Specification.find_by_path(plugin_path) ||
+        local_gemspec_for(plugin_path)
+    end
 
-      if ! Dir.glob("#{local_gem_path}#{Gem.suffix_pattern}").empty?
-        Gem::Specification.load(File.expand_path(local_gemspec))
-      else
-        Gem::Specification.find_by_path(plugin_path)
-      end
+    # Falls back to a gemspec in the working tree, which is how a plugin being
+    # developed locally -- and so not installed as a gem -- is resolved.
+    #
+    # @param plugin_path [String] the plugin's require path
+    # @return [Gem::Specification, nil] the spec, or nil if there is no local
+    #   gemspec to read
+    def local_gemspec_for(plugin_path)
+      root = $LOAD_PATH.first
+      return nil if root.nil?
+
+      local_gem_path = File.expand_path(plugin_path, root)
+      return nil if Dir.glob("#{local_gem_path}#{Gem.suffix_pattern}").empty?
+
+      local_gemspec = File.join(File.dirname(root), "busser.gemspec")
+      return nil unless File.exist?(local_gemspec)
+
+      Gem::Specification.load(local_gemspec)
     end
   end
 end
