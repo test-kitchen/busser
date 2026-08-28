@@ -33,6 +33,14 @@ main reason to take this version.
 * Rewritten README, and development documentation moved to
   CONTRIBUTING.md ([#63](https://github.com/test-kitchen/busser/pull/63))
 
+## [0.9.1](https://github.com/test-kitchen/busser/compare/v0.9.0...v0.9.1) (2026-08-28)
+
+
+### Bug Fixes
+
+* generate a plugin project that resolves and builds ([#68](https://github.com/test-kitchen/busser/issues/68)) ([0c9a450](https://github.com/test-kitchen/busser/commit/0c9a450af83f086ac3627be938db856c9657208b))
+* report signals and keep bundler out of the busser binstub ([#66](https://github.com/test-kitchen/busser/issues/66)) ([4fc9b35](https://github.com/test-kitchen/busser/commit/4fc9b350c7e3990c82ce4e229927be60a6431ee7))
+
 ## 0.8.0 / 2020-08-20
 
 - Add http_proxy support to `busser plugin install`
