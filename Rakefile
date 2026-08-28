@@ -9,7 +9,7 @@ Rake::TestTask.new(:unit) do |t|
 end
 
 Cucumber::Rake::Task.new(:features) do |t|
-  t.cucumber_opts = ["features", "-x", "--format progress", "--no-color", "-b"]
+  t.cucumber_opts = ["features", "--format progress", "--fail-fast"]
 end
 
 desc "Run all test suites"
