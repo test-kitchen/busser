@@ -22,6 +22,7 @@ require "busser/ui"
 
 module Busser
 
+  # Thor base classes preloaded with Busser's helpers and output methods.
   module Thor
 
     # Base class for all Thor subclasses which includes useful mixins.

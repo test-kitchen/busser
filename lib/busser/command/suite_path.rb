@@ -29,6 +29,9 @@ module Busser
 
       argument :suite_name, required: false
 
+      # Prints where suites live, or where one named suite lives.
+      #
+      # @return [void]
       def path
         say suite_path(suite_name).to_s
       end

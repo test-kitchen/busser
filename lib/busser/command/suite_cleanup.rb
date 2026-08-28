@@ -28,6 +28,9 @@ module Busser
     #
     class SuiteCleanup < Busser::Thor::BaseGroup
 
+      # Removes the suites directory and everything in it.
+      #
+      # @return [void]
       def cleanup
         if suite_path.directory?
           Pathname.glob(suite_path + "*").each do |dir|

@@ -28,6 +28,9 @@ module Busser
     #
     class PluginList < Busser::Thor::BaseGroup
 
+      # Prints the installed plugins and their versions.
+      #
+      # @return [void]
       def list
         if plugin_data.empty?
           say "No plugins installed yet"
@@ -38,6 +41,8 @@ module Busser
 
       private
 
+      # @return [Array<Array(String, String)>] each installed plugin's short
+      #   name and version
       def plugin_data
         @plugin_data ||= Busser::Plugin.runner_plugins.map do |path|
           spec = Busser::Plugin.gem_from_path(path)

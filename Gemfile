@@ -11,3 +11,7 @@ group :test do
   gem "cucumber", ">= 11.1"
   gem "rake"
 end
+
+group :development do
+  gem "yard", ">= 0.9.37"
+end

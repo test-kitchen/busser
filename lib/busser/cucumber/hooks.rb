@@ -14,10 +14,19 @@ After do
   end
 end
 
+# Stashes an environment variable so a scenario can change it and have the
+# original put back afterwards.
+#
+# @param key [String] the variable name
+# @return [String, nil] the stashed value
 def backup_envvar(key)
   ENV["_CUKE_#{key}"] = ENV[key]
 end
 
+# Puts back a variable stashed by {backup_envvar}.
+#
+# @param key [String] the variable name
+# @return [String, nil] the restored value
 def restore_envvar(key)
   ENV[key] = ENV.delete("_CUKE_#{key}")
 end

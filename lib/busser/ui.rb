@@ -29,30 +29,56 @@ module Busser
 
     # Thor::Shell's delegated methods are not mixed into this module, so
     # provide the two output primitives it relies on.
+    # @param msg [String] text to write to stdout
+    # @return [void]
     def say(msg)
       $stdout.puts(msg)
     end
 
+    # @param msg [String] text to write to stderr
+    # @return [void]
     def error(msg)
       $stderr.puts(msg)
     end
 
+    # Announces a step, at the top level of the output.
+    #
+    # @param msg [String] the message
+    # @return [void]
     def banner(msg)
       say("-----> #{msg}")
     end
 
+    # Reports detail beneath a banner.
+    #
+    # @param msg [String] the message
+    # @return [void]
     def info(msg)
       say("       #{msg}")
     end
 
+    # Reports something the user should notice but which is not fatal.
+    #
+    # @param msg [String] the message
+    # @return [void]
     def warn(msg)
       say(">>>>>> #{msg}")
     end
 
+    # Reports a failure, on stderr.
+    #
+    # @param msg [String] the message
+    # @return [void]
     def fatal(msg)
       error("!!!!!! #{msg}")
     end
 
+    # Runs a shell command, exiting with a diagnosis if it fails.
+    #
+    # @param cmd [String] the command line
+    # @param config [Hash] options passed through to Thor's runner
+    # @return [true] if the command succeeded
+    # @see #handle_command
     def run!(cmd, config = {})
       config = { capture: false, verbose: false }.merge(config)
 
@@ -61,6 +87,13 @@ module Busser
       end
     end
 
+    # Runs a Ruby script with the current interpreter, exiting with a
+    # diagnosis if it fails.
+    #
+    # @param cmd [String] the script and its arguments
+    # @param config [Hash] options passed through to Thor's runner
+    # @return [true] if the script succeeded
+    # @see #handle_command
     def run_ruby_script!(cmd, config = {})
       config = { capture: false, verbose: false }.merge(config)
 
@@ -69,15 +102,37 @@ module Busser
       end
     end
 
+    # Reports a failure and exits.
+    #
+    # @param msg [String] the message
+    # @param exitstatus [Integer] the status to exit with
+    # @return [void] does not return
     def die(msg, exitstatus = 1)
       fatal(msg)
       exit(exitstatus)
     end
 
+    # Wrapped so tests can stub it.
+    #
+    # @return [Process::Status, nil] the status of the last child process
     def status
       $?
     end
 
+    # Runs a block and turns however the child process ended into a readable
+    # message and a matching exit status.
+    #
+    # Three endings are distinguished because they mean different things to
+    # someone reading CI output: a nil status usually means the machine ran out
+    # of memory before the child could report; a signal means something killed
+    # the run, typically the out of memory killer; and an exit code means the
+    # command itself failed.
+    #
+    # @param type [String] what was run, for the message
+    # @param cmd [String] the command line, for the message
+    # @yield runs the command
+    # @return [true] if the command succeeded
+    # @raise [StandardError] re-raised if the block itself raised
     def handle_command(type, cmd)
       begin
         yield

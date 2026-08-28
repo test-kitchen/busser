@@ -38,6 +38,10 @@ module Busser
 
       class_option :perms, desc: "Unix permissions on destination file"
 
+      # Writes a file that was streamed in over stdin, checking it arrived
+      # intact before applying its permissions.
+      #
+      # @return [void]
       def perform
         file = File.expand_path(options[:destination])
         contents = Base64.decode64(STDIN.read)

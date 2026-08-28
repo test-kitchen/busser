@@ -27,6 +27,11 @@ module Busser
     #
     class Base < Busser::Thor::BaseGroup
 
+      # Declares work to run once, when Busser installs this plugin -- which
+      # is where a plugin installs the test framework it drives.
+      #
+      # @yield the postinstall body, evaluated on the plugin instance
+      # @return [void]
       def self.postinstall(&block)
         (class << self; self; end).send(:define_method, :run_postinstall) do
           klass = Class.new(Busser::Thor::BaseGroup) do
