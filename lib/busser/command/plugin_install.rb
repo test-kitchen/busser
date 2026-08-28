@@ -120,13 +120,29 @@ module Busser
       #
       # Please use with extreme caution.
       #
+      # The restore is in an ensure block. Without one, a postinstall that
+      # raised left VERIFY_PEER set to VERIFY_NONE for the rest of the
+      # process -- and `busser plugin install` takes a list, so every gem
+      # downloaded for every later plugin in that same run would have had its
+      # certificate unchecked.
+      #
+      # @yield the block to run with peer verification dropped
+      # @return [void]
       def drop_ssl_verify_peer
         before = OpenSSL::SSL::VERIFY_PEER
+        set_ssl_verify_peer(OpenSSL::SSL::VERIFY_NONE)
+        begin
+          yield
+        ensure
+          set_ssl_verify_peer(before)
+        end
+      end
+
+      # @param value [Integer] the OpenSSL verify mode to install
+      # @return [void]
+      def set_ssl_verify_peer(value)
         OpenSSL::SSL.send(:remove_const, "VERIFY_PEER")
-        OpenSSL::SSL.const_set("VERIFY_PEER", OpenSSL::SSL::VERIFY_NONE)
-        yield
-        OpenSSL::SSL.send(:remove_const, "VERIFY_PEER")
-        OpenSSL::SSL.const_set("VERIFY_PEER", before)
+        OpenSSL::SSL.const_set("VERIFY_PEER", value)
       end
     end
   end
