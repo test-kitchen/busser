@@ -33,6 +33,15 @@ main reason to take this version.
 * Rewritten README, and development documentation moved to
   CONTRIBUTING.md ([#63](https://github.com/test-kitchen/busser/pull/63))
 
+## [0.9.3](https://github.com/test-kitchen/busser/compare/v0.9.2...v0.9.3) (2026-08-29)
+
+
+### Bug Fixes
+
+* bring the generated plugin scaffold up to date ([#81](https://github.com/test-kitchen/busser/issues/81)) ([f67b8d0](https://github.com/test-kitchen/busser/commit/f67b8d0979d924b2cb653dace74a80fec03a3da5))
+* reject plugin names that cannot be a Ruby constant ([#80](https://github.com/test-kitchen/busser/issues/80)) ([bd7ac17](https://github.com/test-kitchen/busser/commit/bd7ac1749afe458e35328ebb7b57c64634ad1acc))
+* use the Windows path separator in the bat binstub ([#79](https://github.com/test-kitchen/busser/issues/79)) ([1eb0cbf](https://github.com/test-kitchen/busser/commit/1eb0cbf744ce68fc3c4126bf2eec73f784f422e5))
+
 ## [0.9.2](https://github.com/test-kitchen/busser/compare/v0.9.1...v0.9.2) (2026-08-28)
 
 
